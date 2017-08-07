@@ -1,6 +1,6 @@
-#Guide du développeur RGAA 3
+# Guide du développeur RGAA 3
 
-##Introduction
+## Introduction
 
 Ce guide du développeur vous est proposé dans le cadre des ressources accompagnant la prise en main de la version 3 du référentiel général d’accessibilité pour les administrations (RGAA 3).
 

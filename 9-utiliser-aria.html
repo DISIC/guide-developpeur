@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fiche 8 : Utiliser ARIA - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="8-base-reference.html"><span aria-hidden="true"> &laquo; </span>Fiche 7 : Base de référence - Tests de restitution</a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">Fiche 8 : Utiliser ARIA</h1>
+		
+		<div class="bloc-haut">
+			<ul class="nav-context">
+				<li><a href="#introduction">Introduction - cas utilisateur</a></li>
+				<li><a href="#regles">Règles d'utilisation de ARIA dans le HTML</a></li>
+				<li><a href="#specifiques">Utilisation de rôles ou de propriétés spécifiques de l'API ARIA</a></li>
+			</ul>
+		</div>
+
+		<article class="article" id="introduction">
+			<h2>Introduction - cas utilisateur</h2>
+			<p>ARIA est une technologie simple et très puissante dont un des moyens est de modifier la sémantique des éléments. Cette faculté qui peut être délicate doit obéir à des règles d'utilisation afin de ne pas perturber les fonctionnalités proposées par les lecteurs d'écran.</p>
+			<p>ARIA propose quelques rôles et propriétés dont l'usage nécessite également de bien en comprendre les ressorts afin d'éviter de rendre les restitutions incompréhensibles ou inutilisables&nbsp;: c'est le cas par exemple des rôles <code>application</code> et <code>document</code>, ou encore de l'usage des «&nbsp;<span lang="en">live region</span>&nbsp;».</p>
+			<p>L'ensemble de ces règles d'usages sont présentées en détail dans la note <a href="https://github.com/w3c/using-aria/" lang="en">Notes on Using ARIA in HTML</a> que tout développeur devrait avoir lu. Vous en trouverez ci-dessous les principales recommandations.</p>
+		</article>
+		<article class="article" id="regles">
+			<h2>Règles d'utilisation de ARIA dans le HTML</h2>
+			<h3>Privilégier les éléments HTML natifs</h3>
+			<p>ARIA propose beaucoup de rôles dont l'objectif sémantique est équivalent à celui des éléments HTML natifs, par exemple <code>role="list"</code>, <code>role="img"</code> etc.</p>
+			<p>Par exemple&nbsp;:</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"heading"</span> <span class="hljs-attribute">aria-level</span>=<span class="hljs-value">"1"</span>&gt;</span>Titre de niveau 1<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span></code></pre>
+			<p>Cette utilisation des rôles <code>heading</code> et <code>aria-level</code> transforme un simple <code>span</code> en un titre de niveau 1 «&nbsp;virtuel&nbsp;» qui requiert l'utilisation d'une technologie d'assistance compatible pour être correctement restitué.</p>
+			<p>Or, la première règle d'ARIA stipule qu'il faut privilégier l'utilisation d'élément HTML natif, sauf exception&nbsp;:</p>
+			<blockquote>
+				<p lang="en">If you can use a native HTML element or attribute with the semantics and behaviour you require already built in, instead of re-purposing an element and adding an ARIA role, state or property to make it accessible, then do so.</p>
+				<p class="trad">Si vous pouvez utiliser des éléments HTML natifs ou des attributs dont la sémantique et le comportement recherchés sont déjà disponibles, plutôt que de redévelopper un élément et d'ajouter un rôle, un état ou une propriété ARIA pour le rendre accessible, faites-le.</p>
+			</blockquote>
+			<p>Trois situations qui justifient le recours à ARIA peuvent être envisagées pour créer de toute pièce un élément HTML&nbsp;:</p>
+			<ul>
+				<li>si l'élément HTML n'est pas implémenté ou que son accessibilité est défaillante&nbsp;;</li>
+				<li>s'il existe des contraintes de présentation telles qu'elles sont irréalisables avec l'élément natif HTML&nbsp;;</li>
+				<li>si l'élément HTML n'existe simplement pas.</li>
+			</ul>
+			<p>Une autre utilisation possible et qui peut justifier le recours à ARIA est de corriger un contenu HTML défaillant lorsqu'il n'est pas possible d'intervenir sur le HTML natif, même si cette utilisation ne devrait être faite qu'à titre provisoire. Par exemple, lors de l'utilisation d'un <span lang="en">plugin</span> qui génère du HTML et qu'on ne peut pas modifier.</p>
+			<h3>Préserver la sémantique native des éléments</h3>
+			<p>Beaucoup de fonctionnalités d'exploration et de manipulation de contenu offertes par les technologies d'assistance sont fondées sur la sémantique native des éléments HTML. La modifier, via ARIA, sans précautions, c'est prendre le risque de rendre ces fonctionnalités essentielles inopérables.</p>
+			<p>Ainsi, la seconde règle d'ARIA préconise&nbsp;:</p>
+			<blockquote>
+				<p lang="en">Do not change native semantics, unless you really have to.</p>
+				<p class="trad">Ne changez pas la sémantique native d'un élément sauf en dernier recours.</p>
+			</blockquote>
+			<p>Par exemple&nbsp;:</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">h1</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"button"</span>&gt;</span>titre bouton<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span></code></pre>
+			<p>Ce titre transformé en bouton sera inatteignable avec le raccourci de navigation de titre en titre fourni par une technologie d'assistance. On devrait plutôt écrire&nbsp;:</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">button</span>&gt;</span>titre bouton<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span></code></pre>
+			<p>En revanche, il est possible dans certains cas d'utiliser des éléments HTML natifs comme méthode de «&nbsp;<span lang="en">fallback</span>&nbsp;». Par exemple, utiliser une liste HTML <code>ul li</code> pour implémenter un rôle <code>tree</code> dont le but est de créer une arborescence interactive.</p>
+			<h3>Rendre opérables au clavier les éléments interactifs contrôlés par ARIA</h3>
+			<p>Comme expliqué dans les chapitres précédents, ARIA se contente de décrire les éléments et les navigateurs n'implémentent pas tous les comportements ad hoc au clavier.</p>
+			<p>C'est pourquoi la troisième règle d'ARIA préconise&nbsp;:</p>
+			<blockquote>
+				<p lang="en">All interactive ARIA controls must be usable with the keyboard.</p>
+				<p class="trad">Tous les contrôles interactifs ARIA doivent être utilisables au clavier.</p>	
+			</blockquote>
+			<p>Cette règle est implémentée comme une exigence formelle dans le RGAA via l'obligation, d'une part, de respecter les motifs de conception ARIA et, d'autre part, de rendre les composants interactifs utilisables au clavier lorsqu'il n'existe pas de tel motif de conception.</p>
+			<h3>Ne pas inhiber la sémantique ou la restitution des éléments focusables visibles</h3>
+			<p>ARIA propose un rôle <code>presentation</code> qui supprime la sémantique restituée.</p>
+			<p>Par exemple&nbsp;:</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">table</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"presentation"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-title">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">table</span>&gt;</span>
+</code></pre>
+			<p>À cause du <code>role="presentation"</code>, ce tableau n'existera plus dans l'«&nbsp;<span lang="en">accessible tree</span>&nbsp;». Cela peut-être utile pour supprimer la sémantique d'éléments utilisés comme <span lang="en">fallback</span> dans des composants complexes. En revanche, son utilisation sur des éléments focusables visibles va poser un problème car certains utilisateurs risquent de prendre le focus sur «&nbsp;rien&nbsp;», c'est à dire un élément inconnu en restitution.</p>
+			<p>De même, ARIA propose une propriété <code>aria-hidden</code> qui signale que l'élément ne doit pas être restitué. Cette propriété est généralement utilisée en conjonction avec des directives CSS d'affichage pour gérer les zones masquées d'un composant complexe.</p>
+			<p>Cette propriété peut également servir à empêcher la restitution d'un élément visible redondant ou inutile, par exemple dans certains cas de simulation de présentation de formulaire sous la forme de tableaux possédant des en-têtes visibles mais inutiles puisque chaque champ possède déjà un label valide.</p>
+			<p>En revanche, comme pour l'utilisation du rôle <code>presentation</code>, l'utilisation de la propriété <code>aria-hidden</code> sur un élément focusable visible peut poser des problèmes.</p>
+			<p>Ainsi, la quatrième règle préconise&nbsp;:</p>
+			<blockquote>
+				<p lang="en">Do not use <code>role="presentation"</code> or <code>aria-hidden="true"</code> on a visible focusable element.</p>
+				<p class="trad">Ne pas utiliser <code>role="presentation"</code> ou <code>aria-hidden="true"</code> sur un élément focusable visible.</p>	
+			</blockquote>
+			<p>Cette règle devrait être <b>toujours</b> respectée.</p>
+			<h3>Donner un nom accessible (<span lang="en">accessible name</span>) à tous les composants contrôlés par ARIA</h3>
+			<p>Cette cinquième règle de bon sens est incontournable. Elle préconise&nbsp;:</p>
+			<blockquote>
+				<p lang="en">All interactive elements must have an accessible name.</p>
+				<p class="trad">Tout élément interactif doit avoir un nom accessible.</p>	
+			</blockquote>
+			<p>Comme expliqué dans les chapitres précédents, fournir un <span lang="en">accessible name</span>, par exemple via les propriétés <code>aria-labelledby</code> ou <code>aria-label</code>, est la seule manière de garantir que l'élément en cours d'utilisation sera correctement identifié par les utilisateurs.</p>
+			<p>Cette règle est encadrée de manière rigoureuse par le RGAA via l'obligation de respecter les motifs de conception, l'obligation de tester les restitutions, et certains critères pour des cas plus spécifiques.</p>
+		</article>
+		<article class="article" id="specifiques">
+			<h2>Utilisation de rôles ou de propriétés spécifiques de l'API ARIA</h2>
+			<h3><code>application</code> vs. <code>document</code></h3>
+			<p>ARIA propose deux rôles qui vont impacter de manière fondamentale l'utilisation des contenus par les aveugles utilisateurs de lecteurs d'écran&nbsp;: les rôles <code>application</code> et <code>document</code>.</p>
+			<p>Pour comprendre l'utilisation de ces deux rôles, il faut décrire brièvement la manière dont les lecteurs d'écran s'interfacent entre l'utilisateur et le navigateur.</p>
+			<p>Les lecteurs d'écrans sous <span lang="en">Windows</span>, <span lang="en">JAWS</span>, NVDA, <span lang="en">Window-Eyes</span>, proposent deux modes d'interaction différents aux utilisateurs&nbsp;: le «&nbsp;mode navigation&nbsp;» et le «&nbsp;mode formulaire&nbsp;».</p>
+			<p>Le mode navigation permet à l'utilisateur de naviguer dans le contenu, stocké sous la forme d'une copie en mémoire de la page, via des raccourcis clavier ou des fonctionnalités de navigation spécifiques.</p>
+			<p>Naturellement, dans ce contexte, le lecteur d'écran a besoin de récupérer l'ensemble des actions au clavier afin de les traiter par ses propres moyens. Dans ce mode d'interaction, le navigateur est totalement passif.</p>
+			<p>Mais dès que l'élément en cours de consultation doit être géré par le navigateur car il correspond à un type connu, le lecteur d'écran va donner le contrôle des touches du clavier au navigateur.</p>
+			<h4>Mode navigation</h4>
+			<p>Par exemple, la lecture ligne à ligne d'un contenu textuel ne requiert aucune action du navigateur et va donc être traitée par le lecteur d'écran de manière autonome. Il en va de même du parcours de titre en titre et de liste en liste, ou du parcours des éléments d'une liste ou des cellules d'un tableau par exemple.</p>
+			<p>Ce mode est appelé le «&nbsp;mode navigation&nbsp;».</p>
+			<h4>Mode formulaire</h4>
+			<p>En revanche, si l'utilisateur rencontre dans sa navigation un élément interactif comme un lien ou un champ de formulaire, le lecteur d'écran va cesser de traiter le clavier&nbsp;: il va passer le relais au navigateur qui va alors actionner les contenus directement.</p>
+			<p>Par exemple, le navigateur va afficher le texte dans une boîte de saisie, afficher la page référencée dans un lien, parcourir la liste des options d'un élément <code>select</code>, positionner le focus sur le prochain élément focusable avec la touche tabulation, etc.</p>
+			<p>Dans ce contexte, le lecteur d'écran se contente de restituer les informations renvoyées par le navigateur et mises à jour via les APIs d'accessibilité et l'«&nbsp;<span lang="en">accessible tree</span>&nbsp;».</p>
+			<p>Ce mode est appelé, par généralisation, le «&nbsp;mode formulaire&nbsp;».</p>
+			<p>Ces changements de mode sont automatiques et transparents pour l'utilisateur qui en est informé par un signal sonore par exemple.</p>
+			<p>Avec ARIA, l'utilisation du rôle <code>application</code> va signaler au lecteur d'écran de passer en «&nbsp;mode formulaire&nbsp;», et inversement, le rôle <code>document</code> va signaler au lecteur d'écran de passer en «&nbsp;mode navigation&nbsp;».</p>
+			<p>Cela a une conséquence majeure pour le développement&nbsp;: en effet, déclencher le «&nbsp;mode formulaire&nbsp;» signifie que <b>c'est au développeur de prendre en charge l'intégralité de la gestion au clavier</b> et de vérifier que les informations de mises à jour sont correctement transmises au lecteur d'écran.</p>
+			<p>Cela sera systématiquement le cas pour tous les composants d'interface qui bénéficient d'un motif de conception nécessitant des interactions au clavier, comme les rôles <code>button</code>, <code>tabpanel</code>, <code>dialog</code>, <code>menu</code> par exemple. D'où l'importance de respecter strictement les interactions au clavier définies par les motifs de conception.</p>
+			<h3>Utilisation du rôle <code>application</code></h3>
+			<p>Vous ne devriez jamais utiliser le rôle <code>application</code> dans le cas général, c'est à dire l'utilisation de composants riches dans une application destinée à afficher des contenus.</p>
+			<p>La seule utilisation imaginable du rôle <code>application</code> serait le développement d'une véritable application web qui fonctionnerait exactement comme une application logicielle habituelle – ce qui est encore assez rare.</p>
+			<h3>Utilisation du rôle <code>document</code></h3>
+			<p>Habituellement, une page web ayant un statut de document par défaut, vous n'aurez pas à utiliser le rôle <code>document</code>. Cela étant dit, ce rôle peut rendre quelques services.</p>
+			<p>Imaginons par exemple un système d'onglets qui affiche du contenu dans ses panneaux.</p>
+			<p>Du fait du rôle <code>application</code> par défaut, l'utilisateur ne pourra pas bénéficier de ses fonctionnalités de navigation dans les contenus des panneaux.</p>
+			<p>Si le panneau n'est constitué que d'éléments interactifs, par exemple des champs de formulaire ou des liens, même accompagnés d'un court texte de présentation, le rôle <code>application</code> restera efficace et simulera parfaitement une situation normale d'utilisation, comme la saisie d'un formulaire par exemple.</p>
+			<p>En revanche, si les panneaux contiennent des textes particulièrement riches, des titres, des paragraphes, des listes, etc., l'utilisation des fonctionnalités de navigation peut être utile.</p>
+			<p>Dans ce cas, l'implémentation d'un rôle <code>document</code> signalera au lecteur d'écran qu'il peut reprendre la main tant que le panneau est actif.</p>
+			<p>Par exemple&nbsp;:</p>
+<pre><code class="hmlt hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"pan0"</span> <span class="hljs-attribute">aria-hidden</span>=<span class="hljs-value">"false"</span> <span class="hljs-attribute">aria-expanded</span>=<span class="hljs-value">"true"</span> <span class="hljs-attribute">aria-labelledby</span>=<span class="hljs-value">"tab0"</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"tabpanel"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"document"</span>&gt;</span>
+  […]
+  <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+</code>
+</pre>
+			<p>Le raisonnement est identique avec une fenêtre modale dont on souhaite donner le contrôle du contenu à l'utilisateur, pour que ce dernier puisse utiliser les touches de navigation dans le contenu par exemple.</p>
+			<h3>Les «&nbsp;<span lang="en">live region</span>&nbsp;»</h3>
+			<p>ARIA possède une propriété particulière <code>aria-live</code> qui va permettre de faire remonter automatiquement les changements de contenus opérés via AJAX par exemple.</p>
+			<p>C'est la seule propriété dont le comportement est pris en charge par le navigateur.</p>
+			<p>Le fonctionnement est le suivant&nbsp;: dès que le navigateur détecte un changement de <code>node</code> (texte, élément ou attribut) dans le contenu spécifié, il remonte la modification au lecteur d'écran qui va vocaliser les contenus selon le paramétrage de la «&nbsp;<span lang="en">live region</span>&nbsp;».</p>
+			<h4>Les paramètres</h4>
+			<ul>
+				<li><code>aria-live="polite"</code>&nbsp;: le contenu est vocalisé dès que l'utilisateur est disponible, c'est à dire dès qu'il ne réalise plus aucune action. <code>aria-live="assertive"</code>&nbsp;: le contenu est vocalisé immédiatement.</li>
+				<li><code>aria-atomic="true"</code>&nbsp;: toute la zone est vocalisée. <code>aria-atomic="false"</code>&nbsp;: seules les modifications sont vocalisées.</li>
+				<li><code>aria-relevant</code> sert à préciser les modifications qui seront vocalisées&nbsp;: <code>addition</code> pour les ajouts de contenus, <code>removal</code> pour les suppressions, <code>all</code> pour vocaliser tous les types de contenus, <code>text</code> pour ne vocaliser que les contenus de type texte.</li>
+			</ul>
+			<p>À noter qu'ARIA propose également des rôles dont le comportement est similaire, comme les rôles <code>alert</code>, <code>log</code> ou <code>progressbar</code> par exemple.</p>
+			<p>Bien utilisée, cette propriété est une solution robuste et efficace pour gérer les zones de mise à jour dynamique, par exemple un panier d'achats affiché dans la page.</p>
+			<p>Mais attention&nbsp;: puisque la zone contrôlée par <code>aria-live</code> va être vocalisée, il convient de l'utiliser avec précaution dès que cette zone va contenir beaucoup de contenus.</p>
+			<p>Par exemple, imaginons un moteur de recherche qui afficherait ses résultats dans la même page via AJAX. L'utilisation de <code>aria-live</code> sur la zone mise à jour risque d'être particulièrement lourde et contre-indiquée. Préférez une prise de focus sur la zone mise à jour en résultat de la fonctionnalité de recherche afin de simuler un rechargement de page classique par exemple.</p>
+			<p>De même, l'utilisation simultanée de plusieurs «&nbsp;<span lang="en">live region</span>&nbsp;» dans une même page ou une même application pourrait donner des résultats difficilement interprétables.</p>
+			<p>Comme tout ce qui concerne ARIA, seuls des tests de restitution en situation réelle peuvent valider l'utilisation cohérente des «&nbsp;<span lang="en">live region</span>&nbsp;».</p>
+		</article>
+	</main>
+
+	<aside role="complementary" id="footer-block" class="clear">
+		<div class="col-1-2">
+			<h2 id="plusloin">Pour aller plus loin</h2>
+			<h3>Références</h3>
+			<ul>
+				<li><a href="https://w3c.github.io/using-aria/" lang="en">Notes on Using ARIA in HTML - W3C</a>&nbsp;;</li>
+			</ul>
+			<h3>Ressources</h3>
+			<p>Pour en savoir plus sur les modes d'interaction des lecteurs d'écran, vous pouvez lire l'excellent article de Leonie Watson (TPG) : <a href="https://tink.uk/understanding-screen-reader-interaction-modes/" lang="en">Understanding screen reader interaction modes</a>.
+		</div>
+	</aside>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

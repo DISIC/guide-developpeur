@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+	<title>Fiche 8 : Base de référence - Tests de restitution - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="css/styles.css" media="all">
+    <link rel="stylesheet" href="css/print.css" media="print">
+    <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+    <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+	<div class="main-header">
+		<div class="inside">
+			<ul class="skip-links">
+				<li><a href="#main">contenu</a></li>
+				<li><a href="#navigation">navigation</a></li>
+			</ul>
+			<header role="banner" class="header  clear" id="banner">
+				<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+			</header>
+
+			<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+				<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+				<ul class="sommaire is-hidden" id="sommaireToggle">
+					<li><a href="index.html">Introduction</a></li>
+					<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+					<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+					<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+					<li><a href="4-aria.html">ARIA</a></li>
+					<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+					<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+					<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+					<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+					<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+				</ul>
+			</nav>
+			<div class="github-link">
+				<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+					<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+				</div>
+			</div>
+		</div>
+
+		<div id="wrapper">
+
+			<nav role="navigation" class="internav clear">
+				<ul>
+					<li><a class="prev" href="7-motif-conception.html"><span aria-hidden="true"> &laquo; </span>Fiche 6 : Motif de conception ARIA </a></li>
+					<li><a class="next" href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA <span aria-hidden="true"> &raquo; </span></a></li>
+				</ul>
+			</nav>
+
+			<main id="main" role="main">
+				<h1 class="fiche-title">Fiche 7&nbsp;: Base de référence - Tests de restitution</h1>
+
+				<div class="bloc-haut">
+					<ul class="nav-context">
+						<li><a href="#introduction">Introduction - cas utilisateur</a></li>
+						<li><a href="#baseref">Base de référence</a></li>
+						<li><a href="#test">Methodologie de test</a></li>
+					</ul>
+
+				</div>
+
+				<article class="article" id="introduction">
+					<h2>Introduction - cas utilisateur</h2>
+					<p>Si l'immense majorité des composants définis par la spécification HTML n'a pas besoin d'être testée, ce n'est pas le cas des composants développés avec JavaScript et ARIA.</p>
+					<p>Si le support d'ARIA par les navigateurs ne pose plus de problème, les technologies d'assistance n'offrent pas encore un support suffisamment robuste et l'on peut constater de grandes variations entre elles.</p>
+					<p>Au delà de ce problème de support d'ARIA par les technologies d'assistance, le simple fait qu'un composant respecte strictement un motif de conception n'est pas une garantie suffisante quant à son accessibilité réelle. En effet les composants peuvent être enrichis de fonctionnalités particulières, agir dans le cadre d'une application et interagir avec d'autres composants.</p>
+					<p>Il est donc primordial que ces composants soient testés en situation réelle avec les technologies d'assistance des utilisateurs.</p>			
+				</article>
+				<article class="article" id="baseref">
+					<h2>Base de référence</h2>
+					<p><img src="img/logo-at.png" alt="" class="right" />Il serait compliqué de tester un composant ou une application avec l'ensemble des technologies d'assistance sans peser très fortement sur la production des contenus web et des applications dont une des caractéristiques est la grande versatilité. Il faut publier vite, souvent. Une application Web n'est, en réalité, qu'une longue suite ininterrompue de <span lang="en">commits</span> de publication.</p>
+					<p>Par ailleurs, les technologies d'assistance ont des parts d'utilisation très diverses. Certaines d'entre elles sont confidentielles ou très spécifiques alors que d'autres couvrent une très large partie des utilisateurs.</p>
+					<p>Enfin, le support d'ARIA reste très inconstant. Certaines technologies d'assistances, particulièrement celles pour qui ARIA n'a qu'une utilité secondaire, sont en effet en retard. Obliger à ce que les composants développés avec JavaScript et ARIA soient compatibles avec elles condamnerait le développement web «&nbsp;accessible&nbsp;» à être très en retrait des technologies web modernes ou à recourir à des alternatives très coûteuses à produire, lorsque c'est possible.</p>
+					<p>Cela a amené le RGAA à définir la notion de «&nbsp;base de référence&nbsp;» qui consiste à définir des combinaisons associant des lecteurs d'écran, des navigateurs et des systèmes d'exploitation pour couvrir la part la plus importante des utilisateurs.</p>
+					<p>La base de référence est constituée des configurations (technologie d'assistance, système d'exploitation, navigateur) qui permettent de déclarer qu'un dispositif HTML5/ARIA est «&nbsp;compatible avec l'accessibilité&nbsp;», comme défini par WCAG 2.</p>
+					<p>Elle est établie par consensus à partir de la liste des technologies d'assistance dont l'usage est suffisamment répandu ou dans certains cas (par exemple pour macOS) lorsqu'elle est fournie de manière native et constitue le moyen privilégié d'accès à l'information et aux fonctionnalités.</p>
+					<p>La combinaison qui apparait la plus satisfaisante est constituée de&nbsp;:</p>
+					<ol>
+						<li>NVDA et Firefox sur Windows&nbsp;;</li>
+						<li>JAWS et Firefox ou Internet Explorer9+ sur Windows&nbsp;;</li>
+						<li><span lang="en">VoiceOver</span> et Safari sur macOS.</li>
+					</ol>
+					<p>La question des versions de lecteur d'écran retenues est importante et obéit aux règles suivantes&nbsp;:</p>
+					<ul>
+						<li>lorsque le lecteur d'écran est publié sous une licence gratuite, comme NVDA, c'est la version courante qui fait office de référence ;</li>
+						<li>lorsque le lecteur d'écran est publié sous une licence payante, comme JAWS, c'est la version précédant la version courante qui fait office de référence.</li>
+					</ul>
+					<h3>Règles complémentaires&nbsp;:</h3>
+					<p>Un certain nombre de règles complémentaires sont associées à l'utilisation d'une base de référence :</p>
+					<ol>
+						<li>L'ensemble des dispositifs HTML5/ARIA ou leurs alternatives doivent être pleinement fonctionnels, sur l'ensemble des pages du site, sans nécessiter de changement de technologie d'assistance en cours d'utilisation&nbsp;;</li>
+						<li>Lorsque des alternatives à des dispositifs HTML5/ARIA sont proposées, elles ne doivent pas nécessiter la désactivation d'une technologie (par exemple JavaScript ou le plugin Flash), sauf s'il s'agit d'une fonctionnalité proposée par le site lui-même. Par exemple : 
+							<ul>
+								<li>le site met à disposition une version alternative conforme pleinement fonctionnelle sans le recours aux technologies dont l'usage est non compatible avec l'accessibilité&nbsp;;</li>
+								<li>le site met à disposition une fonctionnalité de remplacement des dispositifs HTML5/ARIA par des dispositifs alternatifs compatibles&nbsp;;</li>
+							</ul>
+						</li>
+						<li>un moyen est mis à disposition des utilisateurs de technologies d'assistance pour signaler les problèmes rencontrés et obtenir, via un dispositif de compensation, les informations qui seraient rendues indisponibles&nbsp;;</li>
+						<li>si une déclaration de conformité est établie, elle doit comporter la liste des technologies d'assistance avec lesquelles les dispositifs HTML5/ARIA ont été testés et les résultats de ces tests (par exemple "supporté", "non supporté", "supporté partiellement") au moins.</li>
+					</ol>
+					<h3>Cas des environnements maitrisés</h3>
+					<p>Un environnement maitrisé est constitué d'une plateforme de diffusion dont la maîtrise est complète. Cela signifie que les utilisateurs sont connus et que leurs technologies sont contrôlées. Par exemple, lorsque le site web est exclusivement diffusé dans un environnement GNU/Linux, les tests devront être réalisés uniquement sur les navigateurs et les technologies d'assistance utilisés sur cette plateforme. Cette base de référence se substitue à la base de référence utilisée en environnement non maîtrisé.</p>
+					<h3>Élargissement de la base de référence</h3>
+					<p>La base de référence n'est pas une fin en soi, mais juste un socle technique minimum qui assure que, dans la majorité des cas, les composants et les applications pourront être effectivement utilisés.</p>
+					<p>Elle peut et devrait être étendue à des technologies d'assistance dont l'usage est identifié et concerne effectivement les utilisateur des sites et applications.</p>
+					<p>Sont plus particulièrement visées les plateformes de diffusions mobiles, téléphones ou tablettes, dont la grande hétérogénéité et l'évolution constante n'ont pas permis de les prendre en compte. De même, des plateformes dont l'utilisation est moindre, comme GNU/LINUX devraient également, si c'est pertinent dans le contexte de diffusion, être prises en compte afin d'assurer une accessibilité la plus large possible.</p>
+				</article>
+				<article class="article" id="test">
+					<h2>Méthodologie de test ARIA</h2>
+					<p>La méthodologie de test suivante peut être appliquée&nbsp;:</p>
+					<ol>
+						<li>vérifier si nécessaire la conformité du motif de conception utilisé&nbsp;;</li>
+						<li>si possible, tester la restitution avec la base de référence choisie avant l'intégration du composant dans l'application&nbsp;;</li>
+						<li>lors de l'intégration, vérifier avec des tests sur la base de référence choisie que le composant a une restitution cohérente et efficace.</li>
+					</ol>
+					<p>Tester la restitution d'un composant avant son intégration dans une application est toujours une bonne idée. Cela permet, dans le cas où les tests en intégration sont défaillants, de cibler rapidement l'origine du problème&nbsp;: le composant lui-même ou des effets de bords de l'intégration et des interactions avec l'application ou d'autres composants en utilisation.</p>
+					<p>Note&nbsp;: Les modèles de conception ARIA sont actuellement en cours de mise à jour par les auteurs de l'API ARIA (passage de la version 1.0 à la version 1.1). Il faudra néanmoins un certain temps avant que les technologies d'assistance implémentent ces nouveaux modèles de conception.</p>
+					<p>Le RGAA propose dans ses ressources&nbsp;:</p>
+					<ul>
+						<li>Un <a href="https://disic.github.io/guide-lecteurs_ecran/">guide de tests des composants avec les lecteurs d'écran</a> de la base de référence&nbsp;;</li>
+						<li>une <a href="https://github.com/DISIC/rgaa_composants_javascript/blob/master/2014-11-05-Test_DP_ARIA_grille_de_saisie.ods">grille de tests des motifs de conception</a> qui pourront vous guider dans la réalisation des tests.</li>
+					</ul>
+					<h3>Test de conformité du motif de conception utilisé</h3>
+					<p>Le RGAA propose dans ses ressources une plateforme de démonstration de 12 motifs de conception avec l'indication des restitutions obtenues et une grille de tests complète. Vous pouvez réutiliser la grille de tests pour vos propres besoins. <strong>Attention&nbsp;: les composants proposés ne peuvent pas être utilisés en production. Ils sont destinés exclusivement à des tests et à servir de référence pour vos propres tests.</strong></p>
+					<h3>Tests de restitution</h3>
+					<p>Les tests de restitution doivent être effectués en utilisant les lecteurs d'écran de la base de référence, ce qui implique d'en apprendre le fonctionnement. Cette page vous propose un certain nombre de ressources.</p>
+					<p>L'utilisation d'un lecteur d'écran demande un certain temps d'apprentissage. Si le test basique d'un composant ne devrait pas poser de problème, dans le cas de tests menés sur des applications entières, le recours à des prestataires spécialisés est fortement recommandé.</p><p>Soyez également prudent avec les tests réalisés avec des utilisateurs en situation réelle. Si mener des tests utilisateurs peut grandement améliorer l'ergonomie et l'utilisabilité des applications, ils peuvent échouer à remonter des erreurs d'implémentation.</p>
+					<h3>Outil de débogage</h3>
+					<p>Lorsqu'un composant se montre défaillant, il est indispensable de pouvoir déterminer avec précision si l'ensemble des informations sont bien mises à disposition du lecteur d'écran. Pour le vérifier, vous pouvez utiliser des logiciels ou des plugins qui vous permettront d'explorer l'<i lang="en">accessible tree</i> ou les API d'accessibilité système.</p>
+					<h4>Exemple : inspecteur d'objet du SDK de Windows</h4>
+					<p><img src="img/inspect.png" alt="" class="right" /> L'inspecteur d'objet vous permet de parcourir l'ensemble de l'arborescence système pour analyser les propriétés des objets telles qu'elles sont mises à&nbsp; disposition par l'API système.</p>
+					<p>Pour ce qui concerne l'accessibilité, les propriétés «&nbsp;LegacyIAccessible.[propriété]&nbsp;» sont celles qui vont nous intéresser.</p>
+					<p>Cet outil est très puissant. Il permet de choisir le mode d'interaction (tabulation ou pointeur), de scénariser des actions, d'enregistrer des logs.</p>
+					<p>Dans le cadre d'un test de composant, il peut permettre de vérifier si les propriétés d'état sont bien mises à jour par exemple.</p>
+					<h4>Exemple&nbsp;: <span lang="en">AViewer</span></h4>
+					<p>Le logiciel <span lang="en">AViewer</span> proposé par la société <span lang="en">The Pacellio Group (TPG)</span> poursuit le même but en ajoutant plusieurs interfaces comme <span lang="en">IAccessible2</span> qui est l'API utilisée par Firefox par exemple.</p>
+					<p>Ce logiciel est tout aussi efficace que l'inspecteur d'objet de Windows, mais son fonctionnement est plus instable.</p>
+					<h4>Autres logiciels ou plugin</h4>
+					<p>Toutes les plateformes proposent un outil similaire, par exemple sur OSX, il s'agit de <span lang="en">Accessibilty Inspector</span> et <span lang="en">Accerciser</span> pour Linux/Gnome.</p>
+					<p>Enfin, signalons également le plugin «&nbsp;Dom Inspector&nbsp;» qui propose un accès simple à l'<span lang="en">accessible tree</span> avec Firefox.</p>
+				</article>
+			</main>
+
+			<aside role="complementary" id="footer-block" class="clear">
+				<div class="col-1-2">
+					<h2 id="plusloin">Pour aller plus loin</h2>
+					<h3>Références</h3>
+					<ul>
+						<li><a href="http://references.modernisation.gouv.fr/referentiel-technique-0#52-base-de-rfrence">RGAA - base de référence</a>&nbsp;;</li>
+						<li><a href="https://www.w3.org/TR/wai-aria-practices/">Le guide de développement ARIA (en anglais)</a>&nbsp;;</li>
+					</ul>
+					<h3>Ressources</h3>
+					<ul>
+						<li><a href="https://disic.github.io/rgaa_composants_javascript/">Ressource RGAA : Implémentation des composants ARIA</a>&nbsp;;</li>
+						<li><a href="https://www.paciellogroup.com/blog/2015/01/basic-screen-reader-commands-for-accessibility-testing/" lang="en">Basic screen reader commands for accessibility testing - TPG&nbsp;;</a></li>
+						<li><a href="https://www.nvda-fr.org/doc/userGuide.html">Guide de l'utilisateur - NVDA&nbsp;;</a></li>
+						<li><a href="http://webaim.org/resources/shortcuts/nvda" lang="en">Keyboard Shortcuts for NVDA - WebAIM</a></li>
+						<li><a href="http://webaim.org/resources/shortcuts/jaws" lang="en">Keyboard Shortcuts for JAWS - WebAIM</a></li>
+			   <li><a href="http://webaim.org/articles/voiceover/" lang="en">Using VoiceOver to Evaluate Web Accessibility - WeBAIM&nbsp;;</a></li>
+			   <li><a href="https://fr.slideshare.net/aidantierney/ios-voiceover-testing-techniques-procedures-for-absolute-beginners-45505387" lang="en">iOS VoiceOver Testing Techniques &amp; Procedures for Absolute Beginners - Aidan Tierney</a>&nbsp;;</li>
+	     <li><a href="https://www.paciellogroup.com/blog/2015/10/accessibility-testing-with-android-talkback/" lang="en">Accessibility testing with Android Talkback - TPG&nbsp;;</a></li>
+	     <li><a href="https://www.interactiveaccessibility.com/blog/mobile-screen-reader-gestures" lang="en">iOS &amp; Android Screen Reader Gesture Reference Cheatsheet - Interactive Accessibility</a>.</li>
+</ul>
+<h3>Outils</h3>
+<ul>
+	<li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd318521%28v=vs.85%29.aspx" lang="en">Inspect - Microsoft</a>&nbsp;;</li>
+	<li><a href="https://www.paciellogroup.com/resources/aviewer/" lang="en">Accessibility Viewer - TPG&nbsp;;</a></li>
+	<li><a href="https://wiki.gnome.org/action/show/Apps/Accerciser?action=show&amp;redirect=Accerciser" lang="en">Accerciser - Gnome</a>&nbsp;;</li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Accessibility/Conceptual/AccessibilityMacOSX/OSXAXTestingApps.html" lang="en">Testing for Accessibility on OS X - Apple&nbsp;;</a></li><li><a href="https://addons.mozilla.org/fr/firefox/addon/dom-inspector-6622/" lang="en">DOM Inspector - Firefox</a>&nbsp;;</li>
+</ul>
+
+</div>
+</aside>
+
+<footer id="footer" role="contentinfo" class="clear">
+	<h2>Licence d'utilisation</h2>
+	<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+	<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

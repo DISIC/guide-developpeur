@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fiche 6 : Motif de conception ARIA - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">Fiche 4&nbsp;: ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="6-lecteur-ecran.html"><span aria-hidden="true"> &laquo; </span>Fiche 5 : Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+			<li><a class="next" href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution <span aria-hidden="true"> &raquo; </span></a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">Fiche&nbsp;6 : Motif de conception ARIA</h1>
+		
+		<div class="bloc-haut">
+			<ul class="nav-context">
+				<li><a href="#introduction">Introduction - cas utilisateur</a></li>
+				<li><a href="#motif">Motif de conception ARIA</a></li>
+				<li><a href="#exemple">Exemple : une fenêtre de dialogue</a></li>
+				<li><a href="#clavier">Interaction au clavier</a></li>
+				<li><a href="#sans-motif">Que faire quand il n'existe pas de motif de conception</a></li>
+				<li><a href="#garantir">Garantir l'accessibilité des composants riches</a></li>
+			</ul>
+		</div>
+
+		<article class="article" id="introduction">
+			<h2>Introduction - cas utilisateur</h2>
+			<p>Afin de pouvoir accompagner les développeurs dans la conception de composants riches, ARIA propose des motifs de conception (<i lang="en">design pattern</i> en anglais) pour environ 39 composants prédéterminés.</p>
+			<p>À ces motifs de conception, s'ajoute un certain nombre de principes de conception par exemple pour la gestion du focus, etc.</p>
+			<p>Présentés dans un guide de développement, ces motifs de conception sont essentiels pour proposer des composants qui fonctionnent de manière homogène et prédictive pour les utilisateurs.</p>
+			<p>Les motifs de conception, particulièrement pour ce qui concerne la gestion au clavier, sont inspirés par le fonctionnement des interfaces logicielles.</p>			
+		</article>
+		<article class="article" id="motif">
+		<h2>Motif de conception ARIA</h2>
+		<p>Un motif de conception est composé de deux volets&nbsp;: l'un va décrire la structure du composant, les rôles, propriétés et états à utiliser, le second décrit très précisément le comportement attendu du composant et l'ensemble des interactions au clavier qui doivent être implémentées.</p>
+		<p>Ces motifs de conception sont particulièrement importants car ils permettent aux navigateurs et aux technologies d'assistance de disposer de composants dont le comportement est prédictif. Tout ceci permet de s'assurer que les restitutions, et surtout la manipulation de ces composants par les utilisateurs, seront cohérentes.</p>
+		<p>Les motifs de conception sont liés à des rôles. Cela  implique que l'utilisation de ces rôles respecte le modèle proposé.</p>
+		</article>
+
+		<article class="article" id="exemple">
+		<h2>Exemple&nbsp;: une fenêtre de dialogue</h2>
+		<h3>Implémentation des rôles, propriété et états ARIA</h3>
+		<p><img src="img/modale-aria.png" alt="" class="right" /> Prenons par exemple un motif de conception simple lié au rôle <code>dialog</code>. Ce rôle permet de proposer un contenu sous la forme d'une fenêtre de dialogue qui peut être modale ou non modale.</p>
+		<p>La fenêtre de dialogue doit être présentée sous la forme d'un élément HTML unique et doit, comme tout composant interactif, être dotée d'un nom.</p>
+		<p>Le motif de conception <code>dialog</code> propose deux méthodes pour le nom. Elles s'appuient sur deux propriétés génériques que l'on retrouvera sur la majorité des composants&nbsp;:</p>
+		<ul>
+			<li><code>aria-label</code> qui permet de définir l'étiquette d'un objet&nbsp;;</li>
+			<li><code>aria-labelledby</code> qui permet d'utiliser un passage de texte identifié comme étiquette du composant.</li>
+		</ul>
+		<p>Voici deux manières d'implémenter le modèle proposé.</p>
+<pre><code class="HTML hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"dialog"</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"mymodale"</span> <span class="hljs-attribute">aria-label</span>=<span class="hljs-value">"Connection"</span>&gt;</span>
+[…]
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
+<br>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"dialog"</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"mymodale"</span> <span class="hljs-attribute">aria-labelledby</span>=<span class="hljs-value">"foo"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">h1</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"foo"</span>&gt;</span>Titre<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+[…]
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code>
+</pre>
+<p>Du point de vue de l'implémentation des propriétés ARIA, il n'y a rien d'autre à faire. Le rôle <code>dialog</code> signalera au lecteur d'écran qu'il s'agit d'une fenêtre de dialogue. NVDA le restituera par «&nbsp;Connexion dialogue&nbsp;» et JAWS par «&nbsp;Connexion, boite de dialogue&nbsp;» par exemple.</p>
+<h3>Comportement et gestion au clavier</h3>
+<p>Le comportement basique d'une fenêtre de dialogue est d'être affichée et fermée, rien de plus. Néanmoins, se pose immédiatement un problème&nbsp;: que faire de la position active de l'utilisateur (la position du focus) lorsqu'il va déclencher l'apparition de la fenêtre&nbsp;?</p>
+<p>Le motif de conception nous indique que le focus doit être donné sur le premier élément interactif capable de le recevoir dans la fenêtre. C'est extrêmement important puisque c'est cette prise de focus qui, en activant le composant, va déclencher la cascade de mise à jour jusqu'au lecteur d'écran pour qu'il puisse le restituer.</p>
+<p>Notre modèle va donc être complété en insérant un bouton de fermeture et transférant le focus sur ce bouton à l'ouverture de la fenêtre.</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"dialog"</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"mymodale"</span> <span class="hljs-attribute">aria-labelledby</span>=<span class="hljs-value">"foo"</span> <span class="hljs-attribute">tabindex</span>=<span class="hljs-value">"-1"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">h1</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"foo"</span>&gt;</span>Titre<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"close"</span>&gt;</span>Fermer<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+  […]
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
+<p>À l'ouverture de la fenêtre, le focus sera transmis au bouton de fermeture, ce qui va déclencher la vocalisation de l'ensemble du contenu de la fenêtre par les lecteurs d'écran.</p>
+		<p>La question se pose maintenant de savoir quoi faire à la fermeture. Le modèle indique qu'il faudra simplement redonner le focus à l'élément qui a permis d'ouvrir la fenêtre. À la souris naturellement, mais également au clavier.</p>
+		<p>ARIA demande deux méthodes pour fermer une fenêtre&nbsp;:</p>
+		<ul>
+			<li>en activant le bouton de fermeture&nbsp;;</li>
+			<li>en appuyant sur la touche <kbd>ESC</kbd>.</li>
+		</ul>
+		<p>Cela implique donc d'ajouter aux méthodes gérant les clics de souris&nbsp;: 
+		<ul>
+			<li>une méthode pour la touche <kbd>ENTRÉE</kbd>&nbsp;;</li>
+			<li>et une autre pour la touche <kbd>ESC</kbd>.</li>
+		</ul>
+		<p>Note&nbsp;: il peut être utile de doter certains composants d'un attribut <code>tabindex="-1"</code>, ce qui aura pour effet de pouvoir les manipuler avec la méthode JavaScript <code>element.focus()</code>. Cela sera utile pour surveiller que le focus est toujours capturé par la fenêtre.</p>
+		<h3>Modale ou non modale</h3>
+		<p>Une fenêtre modale est utilisée généralement lorsque l'on fait dépendre une action d'une opération réalisée par l'utilisateur. Ce sera le cas par exemple d'un formulaire de saisie de login ou encore d'une demande de confirmation affiché sous la forme d'une fenêtre.</p>
+		<p>Généralement, chaque fois qu'un contenu va être proposé sous la forme d'une fenêtre superposée au contenu principal, il s'agira d'une fenêtre modale.</p>
+		<p>Mais il peut y avoir des cas où un contenu proposé sous la forme d'une fenêtre ne requiert aucune action de l'utilisateur (par exemple un texte d'aide affiché lors de la saisie d'un formulaire). Bien que d'autres modèles de conception puissent être utilisés (comme le rôle <code>tooltip</code> ou <code>alert</code>code>) si c'est le rôle <code>dialog</code> ou <code>alertdialog</code> qui est utilisé, on parlera d'une <strong>fenêtre non modale</strong>.</p>
+		<p>La différence de comportement est simple à comprendre. Une fenêtre modale doit impérativement «&nbsp;capturer&nbsp;» l'utilisateur qui ne doit pouvoir réagir qu'avec le contenu de la fenêtre tant qu'elle est affichée. Dans une fenêtre non modale, l'utilisateur est libre de poursuivre sa consultation indépendamment de l'affichage ou non de la fenêtre.</p>
+		<h4>Comportement d'une fenêtre modale</h4>
+		<p>Le dernier point concerne le fonctionnement de la fenêtre. Une fenêtre modale doit capturer les actions de l'utilisateur tant qu'elle est affichée, ce qui implique qu'il ne puisse pas naviguer ailleurs que dans la fenêtre. De plus, il faudra modifier le comportement de la tabulation. Tant que la fenêtre est active, l'utilisateur ne doit tabuler que dans les éléments tabulables de la fenêtre.</p>
+		<p>Lorsque la fenêtre n'est pas modale en revanche, il peut en sortir pour suivre un parcours de tabulation habituel.</p>
+		<h3>Résumé</h3>
+		<p>Ce modèle est assez simple et peut se résumer de la manière suivante&nbsp;: </p>
+		<ol>
+			<li>la fenêtre doit être implémentée sous la forme d'un élément englobant doté du rôle <code>dialog</code>&nbsp;;</li>
+			<li>la fenêtre doit posséder un nom en utilisant <code>aria-label</code> ou <code>aria-labelledby</code>&nbsp;;
+			</li>
+			<li>à l'ouverture, le focus doit être transféré sur le premier élément qui peut recevoir le focus de tabulation&nbsp;;</li>
+			<li>à la fermeture, le focus doit être rendu à l'élément ayant permis d'ouvrir la fenêtre&nbsp;;</li>
+			<li>la fenêtre doit pouvoir se fermer avec la touche <code>ESC</code> au moins&nbsp;;</li>
+			<li>si la fenêtre est une fenêtre modale&nbsp;:
+				<ul>
+				<li>le focus doit être maintenu dans la modale&nbsp;;</li>
+				<li>la tabulation doit être circonscrite aux seuls éléments de la modale.</li>
+				</ul>
+			</li>
+			</ol>
+		</article>
+		<article class="article">
+<h4>Conséquences sur le développement de composants riches</h4>
+		<p>Les motifs de conception sont un outil très puissant qui vise essentiellement deux buts : uniformiser l'expérience utilisateur sur le Web pour l'utilisation des composants et développer de nouveaux modèles d'utilisation au clavier.</p>
+		<p>L'uniformisation du comportement des composants riches est un enjeu majeur du Web, particulièrement pour les applications. Il serait particulièrement compliqué pour les utilisateurs de manipuler ces composants s'ils devaient en réapprendre l'utilisation sur chaque nouveau site ou application.</p>
+		<p>L'enrichissement des interactions au clavier est tout aussi important dans le cas de composants complexes comme un système d'onglets, un calendrier ou un menu en accordéon. En effet la méthode basique de HTML, c'est-à-dire la tabulation, atteint très rapidement des limites qui rendraient l'utilisation de ces composants très laborieuse.</p>
+	</article>
+		<article class="article" id="clavier">
+<h2>Interactions au clavier</h2>
+		<p>Comme dit précédemment, une grande partie d'ARIA est inspirée par l'état de l'art du développement d'applications logicielles accessibles.</p>
+		<p>Le but visé est de tenter d'uniformiser l'expérience utilisateur afin que les composants complexes fonctionnent sensiblement de la même manière que les applications logicielles dont les utilisateurs ont l'habitude.</p>
+		<p>Les conséquences sur le développement sont particulièrement lourdes car cela nécessite d'implémenter de nombreux raccourcis clavier.</p>
+		<p>Sur un <span lang="en">slider</span>, le curseur devra être manipulable avec les flèches de direction. Il devra également fournir des raccourcis clavier pour atteindre le minimum et le maximum et un raccourci pour augmenter ou diminuer la valeur rapidement en utilisant un intervalle.</p>
+<p>Dans des composants encore plus complexes comme un système d'onglets, c'est une dizaine de raccourcis clavier qu'il faudra implémenter.</p>
+		<p><img src="img/slider-exemple.png" alt="" class="right" />  Conscient des difficultés que cela peut représenter, le RGAA a réduit l'exigence aux seules interactions de base indispensables qui mettent en jeux les touches&nbsp;: <kbd>TAB</kbd>, <kbd>ESC</kbd>, <kbd>ESPACE</kbd>, <kbd>ENTER</kbd>, et les touches de direction <kbd>HAUT</kbd>, <kbd>BAS</kbd>, <kbd>DROITE</kbd>, <kbd>GAUCHE</kbd>.</p>
+		<p>Cela ne veut pas dire qu'il ne faut pas implémenter les interactions au clavier riches proposées par les motifs de conception, au contraire.</p>
+		<p>L'implémentation des interactions au clavier change complètement la manière dont les utilisateurs vont naviguer et manipuler les composants. Par exemple, un principe générique est que les différentes parties d'un composant, quand elles ne sont pas constituées d'éléments interactifs, sont atteintes avec les touches de direction, ce qui sera le cas des panneaux d'un système d'onglets par exemple.</p>
+		<p>Ce bouleversement des interactions au clavier nécessite un temps d'appropriation par les utilisateurs qui poussent certains à vouloir ne pas les respecter et s'en tenir au développement de composants riches utilisables, en tout état de cause, avec la seule tabulation.</p>
+		<p><strong>Il s'agit d'une grave erreur. Il est fondamental de respecter à la lettre ces modèles de navigation au clavier. Le RGAA impose, par ailleurs, que soit fournie une aide expliquant le fonctionnement des composants au clavier utilisés sur le site ou l'application Web</strong>.</p>
+
+	</article>	
+		<article class="article" id="sans-motif">
+<h2>Que faire quand il n'existe pas de motif de conception</h2>
+		<p>Bien que très riche, et encore en cours de développement pour la version 1.1, l’API ARIA ne peut pas couvrir tous les cas possibles.</p>
+		<p>Lorsque vous développez un composant qui n'est pas référencé par le guide de développement, il faut, par vous même, trouver les bonnes propriétés à utiliser en puisant dans l'API ou en vous inspirant d'exemples déjà en production.</p>
+		<h5>Zones affichées ou masquées</h5>
+		<p>C'est le cas par exemple des zones qui peuvent s'afficher ou se masquer avec une action de l'utilisateur.</p>
+		<p>Structurellement, cela peut se présenter comme ça : </p>
+<pre><code class="HTML hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">button</span>&gt;</span>en savoir plus<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+  […]
+<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span></code>
+</pre>
+<p>Il faut alors déterminer les informations qui devront être remontées au lecteur d'écran pour lui permettre de restituer le fonctionnement correctement.</p>
+<p>Ici, en l’absence de motif de conception, aucun rôle n'est à utiliser. En revanche, dans tous les cas, l'utilisateur aura besoin de savoir si la zone est affichée ou masquée et, éventuellement, de savoir de quelle zone il s'agit.</p>
+<p>Il y a plusieurs manières de transmettre ces informations. La plus simple est d'utiliser la propriété <code>aria-expanded</code> qui indiquera que la zone est affichée ou masquée. Cette propriété peut être indifféremment positionnée sur la zone ou le bouton lui-même, mais il s'avère que l'implémenter sur le bouton semble plus efficace.</p>
+<p>Il peut être intéressant également de signaler au lecteur d'écran la relation qui existe entre le bouton et la zone contrôlée. ARIA propose la propriété <code>aria-controls</code> à cet effet.</p>
+<p>Voilà l'implémentation basique de ce genre de dispositif&nbsp;: </p>
+<pre><code class="HTML hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">aria-expanded</span>=<span class="hljs-value">"false"</span> <span class="hljs-attribute">aria-controls</span>=<span class="hljs-value">"foo"</span>&gt;</span>en savoir plus sur l'API ARIA<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"foo"</span>&gt;</span>
+    […]
+  <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span></code>
+</pre>
+<p>Avec JavaScript, il suffira de changer la valeur d'état <code>aria-expanded</code> pour signaler le statut de la zone contrôlée. Avec NVDA, cela sera vocalisé par «&nbsp;En savoir plus sur l'API ARIA, bouton, réduit&nbsp;» et «&nbsp;développé&nbsp;» au moment de l'action.</p>
+</article>
+		<article class="article" id="garantir">
+<h2>Garantir l'accessibilité des composants riches</h2>
+<p>Mais cela ne vous garantit pas que ce composant soit réellement accessible, c'est-à-dire qu'un aveugle, utilisateur de lecteur d'écran, sera en mesure de le manipuler et d'en comprendre le fonctionnement.</p>
+<p><strong>Comme pour tous les composants, qu'ils soient ou non encadrés par un motif de conception ARIA, il va falloir le tester en restitution sur les lecteurs d'écran et avec les systèmes d'exploitation qui vont être utilisés en production.</strong></p>
+<p>C'est la seule manière de garantir que les composants développés avec JavaScript et ARIA seront réellement accessibles à tous.</p>
+		</article>
+	</main>
+
+	<aside role="complementary" id="footer-block" class="clear">
+		<div class="col-1-2">
+			<h2 id="plusloin">Pour aller plus loin</h2>
+		<p>Les ressources du RGAA proposent un ensemble de démonstration de composants ARIA avec les restitutions obtenues dans les lecteurs d'écran : <a href="http://disic.github.io/rgaa_composants_javascript/">Ressource RGAA&nbsp;: Implémentation des composants ARIA</a>
+		</p>
+		<h3>Références</h3>
+		<ul>
+		<li><a href="https://www.w3.org/TR/wai-aria-practices/">Le guide de développement ARIA</a></li>
+		</ul>
+			
+		</div>
+	</aside>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

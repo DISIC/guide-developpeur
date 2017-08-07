@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fiche 1 : Ordre de tabulation et piège au clavier - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle&nbsp;?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="httpss://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="index.html"><span aria-hidden="true"> &laquo; </span>Introduction </a></li>
+			<li><a class="next" href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier<span aria-hidden="true"> &raquo; </span></a>
+			</li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier&nbsp;</h1>
+		
+		<div class="bloc-haut">
+			<ul class="nav-context">
+				<li><a href="#introduction">Introduction - cas utilisateur</a></li>
+				<li><a href="#ordre-tab">Ordre de tabulation</a></li>
+				<li><a href="#piege">Piège au clavier</a></li>
+			</ul>
+
+			<aside role="complementary" class="clear resume">
+				<h2 id="resume">Synthèse</h2>
+				<ul>
+				<li>S'assurer que l'ordre dans lequel les éléments sont accédés à la tabulation reste cohérent lorsqu'on manipule le <code>focus</code> avec JavaScript</li>
+				<li>Vérifier impérativement qu'il n'existe aucun piège au clavier et que l'utilisateur peut toujours accéder à l'élément suivant ou précédent avec la touche de tabulation</li>
+				</ul>
+			</aside>
+		</div>
+
+		<article class="article" id="introduction">
+			<h2>Introduction - cas utilisateurs</h2>
+			<p>Les personnes aveugles, utilisateurs de lecteurs d'écran, accèdent aux contenus de manière séquentielle dans l'ordre dans lequel les contenus sont proposés dans le code généré de la page. Les personnes handicapées moteur, qui ne peuvent pas utiliser un système de pointage, vont parcourir les contenus interactifs de la même manière en utilisant essentiellement la tabulation.</p>
+			<p>Dans les deux cas, il est donc important que l'ordre de tabulation reste cohérent, particulièrement lorsque les contenus sont traités via JavaScript. Exemples&nbsp;: l'ouverture d'une fenêtre modale, la mise à jour d'un contenu dans la page ou la simple gestion d'un menu de navigation déroulant.</p>
+			<p>Il faut aussi s'assurer qu'il n'existe pas aucun « piège au clavier&nbsp;» qui capture l'utilisateur dans une zone ou un composant de la page sans qu'il puisse en sortir.</p>		
+		</article>
+		<article class="article" id="ordre-tab">
+			<h2>Ordre de tabulation cohérent</h2>
+			<p>Cela recouvre deux cas&nbsp;: l'ordre de parcours des contenus et la gestion de la tabulation dans un composant riche ou dans des contenus contrôlés par JavaScript.</p>
+			<p>Un ordre de tabulation cohérent ne signifie pas que l'ordre de parcours des contenus doit correspondre à l'ordre naturel de lecture (de gauche à droite et de bas en haut). Les documents et les applications Web peuvent être structurés dans un ordre particulier, différent de l'ordre de lecture naturel particulièrement dans le cas d'application complexe. De même, l'ordre de parcours des contenus peut être adapté aux capacités d'un périphérique comme un téléphone portable par exemple.</p>
+			<p>Dans tous les cas, quelle que soit la structure de la page ou de l'application, l'utilisateur doit pouvoir accéder à tous les contenus de manière logique et efficace.</p>
+		</article>
+		<article class="article">
+		<h3>Quelques points de vigilance</h3>
+		<h4>Menu de navigation</h4>
+		<p>Dans le cas d'un menu déroulant, après ouverture d'un niveau de ce menu, la tabulation doit permettre d'accéder immédiatement au sous-menu. De fait, si le menu et ses sous-menus sont mal structurés, par exemple avec des listes successives au lieu de listes imbriquées, certains utilisateurs pourraient être dans l'incapacité d'atteindre les sous-menus à la tabulation.</p>
+		<h4>Affichage et masquage de contenus.</h4>
+		<p>Dans le cas d'une fonctionnalité permettant d'afficher un contenu masqué, par exemple un formulaire de connexion ou une zone de recherche, il est logique que la prochaine tabulation permette à l'utilisateur d'interagir avec le contenu affiché. Si dans le code, le contenu affiché est situé immédiatement après le lien ou le bouton permettant de l'afficher, l'ordre de tabulation sera naturellement satisfaisant, quelle que soit la position de la zone affichée dans la page. Dans le cas inverse, il sera nécessaire de transférer le focus de tabulation sur la zone affichée afin de restaurer un ordre de tabulation cohérent.</p>
+		<p>Dans certains cas, comme pour une fenêtre modale, ce parcours de tabulation devra correspondre à un modèle précis (cf. plus bas).</p>
+		<h4>Zone de mise à jour</h4>
+		<p>Comme pour les zones affichées ou masquées, lorsqu'une fonctionnalité JavaScript met à jour une zone de la page, par exemple une zone d'actualité, il est logique que la prochaine tabulation permette à l'utilisateur de parcourir la zone mise à jour.</p>
+		<p><strong>Attention&nbsp;: ce n'est pas forcément un cas systématique&nbsp;!</strong></p><p>Pour un panier mis à jour suite à la sélection d'un produit il serait particulièrement laborieux pour l'utilisateur de devoir passer par le panier à chaque mise à jour. Un autre dispositif (les «&nbsp;live region&nbsp;» ARIA) permet de prendre ces cas en charge pour optimiser l'expérience de l'utilisateur. Cette problématique sera abordée dans le chapitre ARIA.</p>
+		</article>
+		<article class="article">
+		<h3>Cas des composants riches basés sur un motif de conception ARIA</h3>
+		<p><img src="img/12.13-ordretabulation.png" alt="" class="right" /> Lorsque le contenu est un composant riche (une fenêtre de dialogue (<code>dialog</code>), un système d'onglets (<code>tabpanel</code>), …) l'API ARIA définit des «&nbsp;motifs de conception&nbsp;» qui décrivent précisément le comportement de la tabulation. Celui-ci peut être très différent du comportement dans des contenus textuels.</p><p>Par exemple, dans un système d'onglets l'accès aux différents onglets ne sera pas pris en charge par la tabulation, mais par les flèches de direction, à l'image de la manipulation de ce type de composant dans les interfaces logicielles. Le principe de ces parcours de tabulation sera présenté dans le chapitre traitant de la compatibilité des composants riches avec les technologies d'assistance.</p>		
+		</article>
+		<article class="article" id="piege">
+		<h2>Piège au clavier</h2>
+		<p>Il y a un «&nbsp;piège au clavier&nbsp;» lorsque l'utilisateur ne peut pas quitter sa position actuelle. Autrement dit, l'utilisateur ne peut atteindre ni l'élément focusable suivant, ni l'élément focusable précédent avec la touche tabulation. Dans cette situation, s'il ne navigue qu'avec la touche tabulation, sa seule échappatoire sera de fermer son navigateur.</p>
+		<p>Ce problème vient très souvent d'une mauvaise conception de la fonctionnalité ou du composant contrôlé qui se révèle être utilisable uniquement à la souris.</p>
+		<p>Chaque fonctionnalité développée qui met en jeu le focus doit être vérifiée au clavier pour éviter ce genre de catastrophe pour l'utilisateur.</p>
+		<p><strong>Note importante&nbsp;:</strong> dans certains navigateurs (<span lang="en">Firefox</span> par exemple), l'insertion d'une balise <code>object</code> peut provoquer un piège au clavier. Il s'agit d'un bug et ce n'est pas considéré comme une non-conformité, du point de vue du RGAA.</p>
+		</article>
+	</main>
+
+	<aside role="complementary" id="footer-block" class="clear">
+		<div class="col-1-2">
+			<h2 id="plusloin">Pour aller plus loin</h2>
+			<h3>Critères de succès WCAG</h3>
+		<ul>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#keyboard-operation-keyboard-operable">2.1.1</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#keyboard-operation-trapping">2.1.2</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#navigation-mechanisms-focus-order">2.4.3</a></li>
+		</ul>
+		<h3>Techniques et échecs WCAG</h3>
+		<ul>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G21.html">G21</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G59.html">G59</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/H4.html">H4</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/H91.html">H91</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F10.html">F10</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F44.html">F44</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F85.html">F85</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC26.html">SRC26</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC27.html">SRC27</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC37.html">SRC37</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/C27.html">C27</a></li>
+			</ul>
+		</div>
+		<div class="col-1-2">
+			<h2 id="criteres">Critères RGAA 3</h2>	
+		<ul>
+			<li>12.13[A]</li>
+			<li>12.14[A]</li>
+		</ul>
+		</div>
+	</aside>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="https://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="httpss://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="httpss://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

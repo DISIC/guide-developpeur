@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fiche 3 : Changement de contexte et alerte non sollicitée - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="2-compatibilite-access-clavier.html"><span aria-hidden="true"> &laquo; </span> Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+			<li><a class="next" href="4-aria.html">ARIA <span aria-hidden="true"> &raquo; </span></a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée&nbsp;</h1>
+		
+		<div class="bloc-haut">
+			<ul class="nav-context">
+				<li><a href="#introduction">Introduction - cas utilisateur</a></li>
+				<li><a href="#contexte">Changement de contexte</a></li>
+				<li><a href="#alert">Alerte non sollicitée</a></li>
+			</ul>
+
+			<aside role="complementary" class="clear resume">
+				<h2 id="resume">Synthèse</h2>
+				<ul>
+				<li>S'assurer que l'utilisateur est averti et peut contrôler les changements de contexte</li>
+				<li>S'assurer que les alertes non sollicitées sont contrôlables par l'utilisateur</li>
+				</ul>
+				
+			</aside>
+		</div>
+
+		<article class="article" id="introduction">
+			<h2>Introduction - cas utilisateurs</h2>
+			<p>Un changement de contexte est un changement dans la page risquant d'être ignoré ou incompris par un utilisateur qui ne peut pas voir la page dans sa globalité. C'est le cas notamment des aveugles qui utilisent un lecteur d'écran et des malvoyants qui naviguent avec une loupe d'écran.</p>
+			<p>Exemple&nbsp;: la mise à jour de champs de formulaire dynamique ou un changement de contenu dynamique de la page.</p>
+			<p>Afin de leur permettre de comprendre ces changements, il faut qu'ils en soient préalablement prévenus ou que ces changements résultent d'une action explicite de leur part.</p>
+			<p>Parallèlement, des handicapés mentaux ou certains utilisateurs ayant des troubles de l'attention peuvent avoir des problèmes à interpréter correctement les fenêtres d'alerte quand ils ne les ont pas sollicitées. Dans ce cas, il faut leur offrir le moyen de les contrôler, notamment en les désactivant.</p>
+		</article>
+		<article class="article" id="contexte">
+<h2>Changement de contexte</h2>
+		<p>Les changements de contexte sont nombreux sur une page ou une application web. On considère qu'il y a un changement de contexte dans les cas suivants&nbsp;:</p>
+		<ul>
+			<li>changement d'agent utilisateur, par exemple sur un lien de téléchargement ;</li>
+			<li>changement d'espace de restitution, par exemple l'affichage d'une nouvelle page ;</li>
+			<li>changement de focus, par exemple le fait de transférer le focus d'un endroit à un autre ;</li>
+			<li>changement de contenu qui modifie le sens de la page ou d'un élément, par exemple une mise à jour dynamique de contenu.</li>			
+		</ul>
+		<p>Ces quatre cas génériques recouvrent des situations, généralement prises en charge par des critères spécifiques dans le référentiel RGAA&nbsp;: comme l’obligation d’indiquer le type de fichier dans un lien de téléchargement, l’obligation de rendre les liens explicites ou encore l’obligation de préserver un ordre de tabulation cohérent.</p>
+		<p>Toutefois, il peut y avoir des cas qui échappent aux critères spécifiques du RGAA.</p>
+		<p>Dans ce cas, en présence d'un changement de contexte avéré, il faut s'assurer que l'utilisateur est prévenu du changement de contexte par l'un des moyens suivants&nbsp;:</p>
+		<ul>
+			<li>un texte explicatif avant le changement de contexte ;</li>
+			<li>l'utilisation d'un bouton pertinent pour initier le changement de contexte ;</li>
+			<li>l'utilisation d'un lien pertinent pour initier le changement de contexte.</li>
+		</ul>
+		<h3>Exemple&nbsp;: mise à jour dynamique de champs de formulaire</h3>
+		<p><img src="img/7.4-changementcontexte.png" alt="" class="right" /> Imaginons un formulaire qui contiendrait deux champs&nbsp;: un champ pour la région et un champ désactivé pour le département. Lorsqu'une région est sélectionnée, le champ Département est activé et mis à jour avec la liste des départements concernés.</p>
+		<p>Il y a potentiellement une situation de changement de contexte.</p>
+		<p>Deux moyens sont possibles pour adapter ce comportement : </p>
+		<ul>
+			<li>interfacer un bouton entre les deux champs de telle sorte que ce soit l'utilisateur qui provoque l'activation et la mise à jour du champ région ;</li>
+			<li>utiliser un <code>fieldset</code> et une légende <code>pertinente</code> comme «&nbsp;choisir la région puis le département&nbsp;».</li>
+		</ul>
+		<p>Dans les deux cas l'utilisateur sera bien prévenu de ce qu'il va se passer et en mesure d'utiliser le mécanisme de manière satisfaisante.</p>
+		<h3>Exemple : liste de navigation</h3>
+		<p>Imaginons une liste <code>select</code> affichant une liste des pages d'un document. Lorsque l'utilisateur sélectionne un item de la liste, la page est mise à jour.</p>
+		<p>Cette situation de changement de contexte très commune est problématique. Si l'utilisateur ne voit pas le changement opéré, il peut simplement l'ignorer et croire qu'il ne s'est rien passé alors que la page a été changée.</p>
+		<p>Le seul moyen d'adapter ce dispositif est de s'en tenir au comportement normal d'une liste <code>select</code> de formulaire&nbsp;: sélectionner un item dans la liste et activer un bouton.</p>
+		<p>Attention&nbsp;: Cette remarque ne concerne que les listes <code>select</code>. Si vous utilisez un composant permettant d'afficher/masquer une liste constituée de liens par exemple, alors il n'y aura rien à faire. L'utilisateur comprendra que la page va être mise à jour s'il active un des liens.</p>
+		</article>
+		<article class="article" id="alerte">
+		<h2>Alerte non sollicitée (AAA)</h2>
+		<p>Il est habituel de vouloir alerter l'utilisateur lors d'actions importantes ou tout au long d'un processus. Lorsque ces informations sont faites sous forme d'alertes, elles peuvent être perturbantes, désorienter l'utilisateur ou rendre ses saisies très laborieuses.</p>
+		<p>Il faut donc toujours donner la possibilité à l'utilisateur de désactiver et de réactiver ces alertes.</p>
+		<p>Font exception les cas d'urgence, d'un événement ou d'une situation soudaine et imprévue qui exige une action immédiate afin de préserver la santé, la sécurité ou la propriété. Dans ces cas il n'est pas requis que les alertes soient contrôlables par l'utilisateur.</p>
+		</article>
+	</main>
+
+	<aside role="complementary" id="footer-block" class="clear">
+		<div class="col-1-2">
+			<h2 id="plusloin">Pour aller plus loin</h2>
+			<h3>Critères de succès WCAG</h3>
+		<ul>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#consistent-behavior-receive-focus">3.2.1</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#consistent-behavior-unpredictable-change">3.2.2</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#consistent-behavior-no-extreme-changes-context">3.2.3</a></li>
+		</ul>
+		<h3>Techniques et échecs WCAG</h3>
+		<ul>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G13.html">G13</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G76.html">G76</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G80.html">G80</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G107.html">G107</a></li>		
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/H32.html">H32</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/H84.html">H84</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC19.html">SRC19</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F9.html">F9</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F22.html">F22</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F36.html">F36</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F37.html">F37</a></li>				
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F41.html">F41</a></li>
+		</ul>			
+
+		</div>
+		<div class="col-1-2">
+			<h2 id="criteres">Critères RGAA 3</h2>
+<ul>
+			<li>7.4[A]</li>
+			<li>7.5[AAA]</li>
+		</ul>			
+		</div>
+	</aside>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

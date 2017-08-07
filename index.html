@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="next" href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier <span aria-hidden="true"> &raquo; </span></a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<article class="article">
+		<h2>Introduction</h2>
+			<p>Ce guide du développeur vous est proposé dans le cadre des ressources accompagnant la prise en main de la version&nbsp;3 du référentiel général d’accessibilité pour les administrations (RGAA&nbsp;3).</p>
+<p>Toutes les règles et tous les exemples d’implémentation donnés ici se réfèrent à la version&nbsp;3 du RGAA.</p>
+<p>Le RGAA&nbsp;3 est composé d’un <a href="http://references.modernisation.gouv.fr/rgaa/introduction-RGAA.html">document d’introduction</a>, d’un <a href="http://references.modernisation.gouv.fr/rgaa/guide-accompagnement-RGAA.html">guide d’accompagnement</a> et d’un <a href="http://references.modernisation.gouv.fr/rgaa/criteres.html">référentiel technique</a>. Cet ensemble de documents a une portée réglementaire puisqu’ils ont été rendus officiels par l'<a href="http://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000030540064&amp;dateTexte=20150921">arrêté du 29 avril 2015</a>, lui-même venant préciser l'<a href="http://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000000809647&amp;fastPos=1&amp;fastReqId=1497340759&amp;categorieLien=cid&amp;oldAction=rechTexte#LEGIARTI000006682279">article 47 de la loi&nbsp;2005-102 du 11 février 2005</a> et l'<a href="http://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000030540064&amp;categorieLien=id">arrêté&nbsp;2009-546 du 14 mai 2009</a>.</p>
+<p>Les ressources complémentaires sont des supports sans valeur réglementaire et visent à vous aider à rendre vos contenus numériques accessibles et conformes au RGAA&nbsp;3.</p>
+		</article>
+		<article class="article">
+			<h2 id="&#224;-qui-sadresse-ce-guide">&#192; qui s'adresse ce guide&#160;?</h2>
+			<p>Ce guide s'adresse aux développeurs d'application ou de composant web. Il se focalise sur les problématiques liées à l'utilisation de JavaScript et de l'API ARIA.</p>
+			<p>Une bonne maîtrise de HTML, CSS et JavaScript est requise pour la lecture de ce guide.</p>
+		</article>
+		<article class="article">
+			<h3 id="&#224;-chacun-son-m&#233;tier">&#192; chacun son m&#233;tier</h3>
+			<p>Ne seront abordées dans ce guide que les problématiques liées à l'accessibilité des fonctionnalités ou composants développés par l'intermédiaire de JavaScript et ARIA. Les autres problématiques sont prises en charge par les autres guides comme le <a href="https://disic.github.io/guide-integrateur/">guide de l'intégrateur</a> par exemple.</p>
+		</article>
+		<article class="article">
+			<h2 id="mode-demploi-du-guide">Mode d'emploi du guide</h2>
+			<p>Le guide a été pensé comme une série de fiches pratiques sur le même modèle pour en faciliter l’utilisation. Chaque fiche étant indépendante, vous pouvez les lire en fonction de vos besoins, sans avoir à suivre un ordre particulier.</p>
+			
+			<p>Vous retrouverez dans chaque fiche&nbsp;:</p>
+			<ul>
+			<li>Sommaire&nbsp;: pour naviguer à travers l’ensemble des fiches du guide ;</li>
+			<li>Synthèse&nbsp;: les principaux points à retenir ;</li>
+			<li>Correspondances RGAA&nbsp;3&nbsp;: les correspondances avec les critères du référentiel technique du RGAA&nbsp;3.</li>
+			</ul>			
+		</article>
+		<article class="article">
+			<h2 id="guides-connexes">Ressources connexes et références</h2>
+				<ul>
+				<li><a href="https://disic.github.io/guide-integrateur/">Guide de l'intégrateur RGAA&nbsp;3</a></li>
+				<li><a href="http://disic.github.io/rgaa_methodologie/">Méthodologie de test RGAA&nbsp;3</a><li>
+				<li><a href="https://disic.github.io/guide-impacts_utilisateurs/">Guide «&nbsp;Défauts d'accessibilité&nbsp;: Impacts sur les utilisateurs&nbsp;»</a></li>
+				<li><a href="http://www.w3.org/Translations/NOTE-UNDERSTANDING-WCAG20-fr/Overview.html#contents">Comprendre les WCAG&nbsp;: description de cas utilisateurs et d’impacts par type de handicap</a></li>
+				<li><a href="https://www.w3.org/TR/WCAG20-TECHS/" hreflang="en">Liste des techniques et échecs WCAG&nbsp;2.0 (ressource en anglais)</a></li>
+			</ul>
+		</article>
+	</main>
+
+
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

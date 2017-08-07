@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ARIA - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>							
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="3-changement-contexte.html"><span aria-hidden="true"> &laquo; </span>Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+			<li><a class="next" href="5-api-aria.html">Fiche 4&nbsp;: <span lang="en">Accessible Rich Internet Application (WAI ARIA)</span> <span aria-hidden="true"> &raquo; </span></a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">ARIA&nbsp;</h1>
+		<article class="article" id="introduction">
+			<h2>Introduction</h2>
+<p>ARIA est une API destinée à rendre les composants et les applications développées avec JavaScript accessibles à tous.</p>
+<p>Cette partie présente les points essentiels de l'API, son fonctionnement en liaison avec les technologies d'assistance et les règles de bonnes pratiques à respecter.</p>
+<p>Néanmoins, ARIA est un sujet complexe, basé sur des principes d'implémentation simples, qui nécessite un véritable apprentissage et une veille constante du fait de l'évolution et de la disparité du support de ses propriétés dans les navigateurs et les technologies d'assistance.</p>
+<p>Seront abordés les bases essentielles de l'API, la manière dont les technologies d'assistance peuvent en bénéficier, les notions de «&nbsp;motif de conception&nbsp;» et de «&nbsp;base de référence&nbsp;», les règles d'utilisation d'ARIA dans les applications et les documents Web.</p>
+<p>Cette partie s'articule sur 5 fiches&nbsp;:</p> 
+<ul>
+	<li>Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA)</li>
+	<li>Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</li>
+	<li>Fiche 6&nbsp;: Motif de conception ARIA</li>
+	<li>Fiche 7&nbsp;: Base de référence - Tests de restitution</li>
+	<li>Fiche 8&nbsp;: Utiliser ARIA</li>	
+</ul>			
+</article>
+	</main>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

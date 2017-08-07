@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fiche 5 : Comment un lecteur d'écran sait-il de quoi il parle ? - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA)</a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="5-api-aria.html"><span aria-hidden="true"> &laquo; </span>Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+			<li><a class="next" href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA <span aria-hidden="true"> &raquo; </span></a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle&nbsp;?</h1>
+		
+		<div class="bloc-haut">
+			<ul class="nav-context">
+				<li><a href="#introduction">Introduction - cas utilisateur</a></li>
+				<li><a href="#contenu-utilisateur">Du contenu à l'utilisateur</a></li>
+				<li><a href="#lecteur-ecran-HTML-ARIA">Le lecteur d'écran, HTML et ARIA</a></li>
+			</ul>
+		</div>
+
+		<article class="article" id="introduction">
+			<h2>Introduction - cas utilisateurs</h2>
+			<p>Un lecteur d'écran est un logiciel particulièrement complexe. Son rôle est de restituer vocalement l'ensemble des contenus affichés à l'écran. Il restitue le contenu textuel, mais également les éléments interactifs ainsi que l'ensemble des changements opérés sur ces derniers.</p>
+			<p>Outre ce rôle qui permet à un aveugle d'accéder à un ordinateur, il a pour charge de lui fournir les moyens d'interagir avec les contenus et les logiciels.</p>
+			<p>Pour ce faire, il s'appuie essentiellement sur les API d'accessibilité du système, au travers desquelles transitent l'ensemble des informations nécessaires et sur les logiciels eux-mêmes auxquels il va transférer des commandes utilisateurs.</p>
+			<p>La caractéristique d'un lecteur d'écran est d'être totalement dépendant des informations fournies par les APIs d'accessibilité, par les logiciels et par les producteurs des contenus et des fonctionnalités.</p>
+			<p>Les développeurs ont donc une responsabilité essentielle car ils sont le dernier maillon entre l'utilisateur et les contenus et fonctionnalités qu'ils proposent.</p>
+			<p>Dans ce système complexe, l'API ARIA va jouer un rôle crucial. C'est à travers elle que les développeurs vont fournir l'ensemble des informations sans lesquelles le contenu et ses fonctionnalités seront simplement inexploitables par l'utilisateur.</p>			
+		</article>
+
+		<article class="article" id="contenu-utilisateur">
+		<h2>Du contenu à l'utilisateur</h2>
+		<p><img src="img/dialogueApi.png" alt="" class="center" /></p>
+		<h3>Notions de base simplifiées</h3>
+		<p><img src="img/exemple-accessible-tree.png" alt="" class="right" /> Comme indiqué plus haut, les systèmes d'exploitation fournissent des API pour centraliser toutes les informations sur les «&nbsp;objets&nbsp;» en cours d'utilisation. Ces informations, qui peuvent être très nombreuses, sont disponibles à tout moment et mises à jour dès que nécessaire.</p>
+		<p>Une partie de ces API est consacrée à l'accessibilité en utilisant des propriétés communes ou dédiées, par exemple le type, le nom, la valeur et les états.</p>
+		<p>Les logiciels ont pour charge de transmettre à l'API système les propriétés caractéristiques des objets qu'ils contrôlent.</p>
+		<p>Les navigateurs Web vont fournir en complément une arborescence d'objets, appelée l'<i lang="en">accessible tree</i>, mis à jour à chaque modification en s'appuyant sur le DOM et en ajoutant pour chaque objet les propriétés nécessaires à l'accessibilité.</p>
+		<p>Les lecteurs d'écran vont s'appuyer sur cette arborescence d'objets et sur les propriétés des éléments, fournis par le système, pour restituer les contenus.</p>
+		<h4>«&nbsp;Case à cocher, non cochée, oui&nbsp;»</h4>
+		<p>Pour comprendre de manière simplifiée comment fonctionne un lecteur d'écran, nous allons prendre l'exemple d'une case à cocher HTML&nbsp;:
+</p><pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"checkbox"</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"checkbox"</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">label</span> <span class="hljs-attribute">for</span>=<span class="hljs-value">"checkbox"</span>&gt;</span>Oui<span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+</code>	
+</pre>
+<p><img src="img/chekbox.png" alt="" class="right" width="327" height="285"/> Étudions quelles sont les informations mises à disposition par le navigateur et l'API MSAA sous Windows (le principe est le même pour macOS ou Linux, seules les API diffèrent).</p>
+<p>Le composant «&nbsp;case à cocher&nbsp;» (<code>type="checkbox"</code>) est connu du navigateur. Ce dernier transmet à l'API les informations suivantes : un rôle «&nbsp;checkbox&nbsp;», un nom «&nbsp;oui&nbsp;», un état «&nbsp;défilant pouvant être actif&nbsp;» et une valeur nulle. Une case à cocher n'a pas de valeur, juste un état. À noter que l'état correspond ici à des caractéristiques héritées, communes à certains types d'éléments interactifs.</p>
+<p>Lorsque l'utilisateur coche la case, le navigateur transmet l'information de mise à jour de l'état qui va 
+devenir «&nbsp;coché, défilant pouvant être actif&nbsp;». «&nbsp;coché&nbsp;» signale qu'il est coché.</p>
+<p>Le lecteur d'écran est donc en mesure de restituer le composant. NVDA vocalisera «&nbsp;case à cocher non cochée oui&nbsp;» pour l'état initial et «&nbsp;oui, case à cocher, cochée&nbsp;» lorsque l'utilisateur actionne le composant.</p>
+<p>Chaque lecteur d'écran vocalise comme il le souhaite les composants. Il n'y a pas de règle en la matière, mais une origine commune&nbsp;: les informations transmises par le navigateur aux APIs système.</p>
+<h4>«&nbsp;Cliquable&nbsp;»</h4>
+<p>Regardons ce qui se passe maintenant avec le même composant simulé avec JavaScript et CSS&nbsp;:</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span> oui
+</code>
+</pre>
+<p><img src="img/chekbox_false.png" alt="" class="right" width="327" height="285"/> Pour le navigateur, un <code>span</code> vide, même avec une magnifique image d'une coche en propriété de fond, ne représente rien. Y compris lorsque l'image est modifiée par JavaScript suite à un clic sur le <code>span</code>. Il va donc transmettre la seule information dont il dispose&nbsp;: un événement (click) est implémenté sur l'objet.</p>
+<p>C'est ce qu'indique l'API qui ne renvoie aucun type, un nom nul et un état «&nbsp;normal&nbsp;» qui signifie simplement que le navigateur n'a rien à dire sur cet élément.</p>
+<p>La case à cocher simulée va être vocalisée par NVDA « cliquable&nbsp;», seule information disponible et, de fait, inutile. C'est là le quotidien des utilisateurs aveugles sur le Web.</p>
+<h4>«&nbsp;Case à cocher, cochée, oui&nbsp;»</h4>
+<p>Reprenons l'exemple précédent. Avec ARIA, nous allons pouvoir transmettre au lecteur d'écran par le navigateur et le système les informations nécessaires à la restitution de la case à cocher simulée.</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"checkbox"</span> <span class="hljs-attribute">aria-checked</span>=<span class="hljs-value">"false"</span> <span class="hljs-attribute">tabindex</span>=<span class="hljs-value">"0"</span> <span class="hljs-attribute">aria-labelledby</span>=<span class="hljs-value">"foo"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"foo"</span>&gt;</span>Oui<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+</code>
+</pre>
+<p><img src="img/chekbox_aria.png" alt="" class="right" width="327" height="285"/> <code>role="checkbox"</code> signale au navigateur le type d'élément. <code>aria-checked</code> transmet l'état. <code>aria-labelledby</code> permet de lier le passage de texte «&nbsp;Oui&nbsp;» pour nommer le composant. Enfin, <code>tabindex="0"</code> permet de rendre le composant opérable au clavier.</p>
+<p>Avec JavaScript, il suffira de mettre à jour l'état <code>aria-checked</code> et de gérer le comportement au clavier en ajoutant à l'événement <code>click</code> un équivalent au clavier pour les touches <kbd>ENTRÉE</kbd> et <kbd>ESPACE</kbd>, car une case à cocher peut s'activer au clavier avec ces deux touches.</p>
+<p>Regardons maintenant le résultat du point de vue de l'API système. Le composant retrouve les mêmes informations qu'une case à cocher HTML, le rôle «&nbsp;case à cocher&nbsp;», un nom «&nbsp;Oui&nbsp;» et les deux états possibles «&nbsp;défilant pouvant être actif&nbsp;» et «&nbsp;coché, défilant pouvant être actif&nbsp;».</p>
+<p>NVDA par exemple restituera cet élément de la manière suivante : «&nbsp; case à cocher, non cochée, oui&nbsp;» et «&nbsp;case à cocher, cochée, oui&nbsp;» de manière quasi identique à l'original HTML. L'utilisateur, lui, n'y verra aucune différence.</p>
+</article>
+<article class="article" id="lecteur-ecran-HTML-ARIA">
+<h2>Le lecteur d'écran, HTML et ARIA</h2>
+	<p>Il en va de même pour tout ce qui est affiché à l'écran, les paragraphes, les titres, les listes, les liens et ainsi de suite du plus simple au plus complexe. Lorsque ces objets correspondent à un type et un comportement connu, ce qui est le cas de tous les objets définis par la spécification HTML, la chaîne d'informations qui va du contenu à l'utilisateur est robuste et les restitutions sont cohérentes.</p>
+	<p>En revanche, lorsque le développeur ne fait pas correctement son travail, par exemple en utilisant des <code>span</code> stylés pour faire des titres, la chaîne d'information est rompue. La restitution est défaillante et les fonctionnalités d'interaction que proposent le lecteur d'écran sont inopérables.</p>
+	<p>De même, lorsque le développeur propose des composants «&nbsp;maison&nbsp;», le navigateur est dans l'incapacité de transmettre les informations nécessaires au lecteur d'écran.</p>
+	<p>Seul le recours à ARIA, en respectant strictement les définitions de rôles, d'états, de propriétés et les directives de comportement qui y sont associées, permettra de rendre ces composants inconnus accessibles à tous.</p>
+	<h3>Note au sujet du nom accessible.</h3>
+	<p>Il existe toujours plusieurs manières de donner un nom à un composant. Cela peut-être&nbsp;: une méthode native fournie par HTML par exemple la balise <code>label</code> pour un champ de formulaire ; une méthode complémentaire également fournie par HTML par exemple avec l'attribut <code>title</code> et des méthodes de surcharges fournies par l'API ARIA par exemple avec les propriétés <code>aria-label</code> ou <code>aria-labelledby</code>.</p>
+	<p>Le navigateur et le lecteur d'écran doivent donc effectuer un calcul pour savoir, lorsque plusieurs de ces méthodes sont utilisées, qu'elle est celle qui détermine le <strong>nom accessible</strong> d'un composant.</p>
+	<p>WCAG fournit un document qui détaille, pour chaque élément, la méthode de calcul du <strong>nom accessible</strong>. Cette méthode de calcul respecte toujours le même modèle&nbsp;: les propriétés ARIA lorsqu'elles sont présentes remplacent la méthode native HTML qui remplace la méthode complémentaire.</p>
+	<p>Il est important de bien comprendre ce principe pour gérer correctement les différentes méthodes permettant de nommer un composant en HTML, mais également de vérifier, lorsque plusieurs d'entre elles sont utilisées, qu'elles le sont de manière cohérente.</p>
+	<p>Le référentiel RGAA comporte à ce sujet quelques tests qui permettent de s'assurer qu'une propriété ARIA mal utilisée ne vient pas remplacer le nom légitime d'un composant.</p>
+	<h3>Le lecteur d'écran et l'utilisateur</h3>
+	<p>Afin de pouvoir faire interagir l'utilisateur avec le contenu, le lecteur d'écran va s'interfacer entre l'utilisateur et le navigateur de la manière suivante&nbsp;: lorsque l'utilisateur va utiliser une des commandes mises à sa disposition, le lecteur d'écran va commander le navigateur par exemple en déplaçant le focus sur tel ou tel élément. À l'inverse, lorsque l'utilisateur actionne un composant connu, par exemple le parcours d'une liste <code>select</code>, le lecteur d'écran va se contenter d'écouter ce que renvoie le navigateur en retour des actions de l'utilisateur.</p>
+	<p>Nous verrons par la suite que ce mode d'interaction peut avoir des conséquences importantes sur la conception de composants complexes.</p>
+		</article>
+	</main>
+
+	<aside role="complementary" id="footer-block" class="clear">
+		<div class="col-1-2">
+			<h2 id="plusloin">Pour aller plus loin</h2>
+			<ul>
+				<li><a href="https://www.w3.org/TR/wai-aria-practices/#checkbox">Le modèle de conception checkbox (en anglais)</a></li>
+				<li><a href="https://www.w3.org/TR/html-aam-1.0/#accessible-name-and-description-computation" lang="en">Accessible Name and Description calculation</a></li>
+			</ul>			
+		</div>
+	</aside>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

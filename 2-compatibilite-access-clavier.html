@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fiche 2 : Compatibilité et accès au clavier - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="1-ordre-tab-piege-clavier.html"><span aria-hidden="true"> &laquo; </span>Fiche 1 : Ordre de tabulation et piège au clavier</a></li>
+			<li><a class="next" href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée <span aria-hidden="true"> &raquo; </span></a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">Fiche 2&nbsp;: Compatibilité et accès au clavier&nbsp;</h1>
+		
+		<div class="bloc-haut">
+			<ul class="nav-context">
+				<li><a href="#introduction">Introduction - cas utilisateur</a></li>
+				<li><a href="#compat">Compatibilité avec l'accessibilité</a></li>
+				<li><a href="#access-clavier">Accès au clavier et à la souris</a></li>
+			</ul>
+
+			<aside role="complementary" class="clear resume">
+				<h2 id="resume">Synthèse</h2>
+				<ul>
+				<li>S'assurer que les composants sont compatibles avec l'accessibilité</li>
+				<li>S'assurer que les composants et fonctionnalités sont accessibles et utilisables au clavier</li>
+				</ul>
+				
+			</aside>
+		</div>
+
+		<article class="article" id="introduction">
+			<h2>Introduction - cas utilisateur</h2>
+			<p>De plus en plus les pages web se retrouvent enrichies de composants applicatifs complexes&nbsp;: fenêtre de dialogue, menu, système d'onglets, slider… Ces derniers sont destinés à créer de véritables applications web contrôlées par JavaScript. Pour certains utilisateurs, plus particulièrement les aveugles qui se servent d’un lecteur d'écran et les handicapés moteurs qui ne peuvent pas employer de souris, ces nouveaux composants peuvent poser des problèmes complexes.</p>
+			<p>L'API ARIA a été spécifiquement conçue pour rendre ces composants accessibles et utilisables par tous. Elle propose notamment des «&nbsp;motifs de conception&nbsp;» qui décrivent très précisément l'implémentation et le comportement au clavier que doivent adopter ces composants.</p>
+			<p>Lorsqu'il existe un «&nbsp;motif de conception&nbsp;», une grande partie du travail consiste à vérifier que celui-ci est scrupuleusement respecté. Lorsqu'il n'en existe pas, il faut s'assurer le composant ou la fonctionnalité est parfaitement accessible à tous.</p>	
+		</article>
+		<article class="article" id="compat">
+		<h2>Compatibilité des composants et fonctionnalités JavaScript</h2>
+		<p><img src="img/7.1-javascript.png" class="right" alt="" />S'agissant des composants développés avec JavaScript et des fonctionnalités associées, deux cas de figure peuvent se présenter.</p>
+		<h3>Composant correspondant à un «&nbsp;motif de conception&nbsp;» ARIA</h3>
+		<p>Imaginons l'implémentation d'une fenêtre de dialogue modale. Cela correspond au motif de conception <code>dialog</code>. Le motif de conception est assez simple à décrire&nbsp;:</p>
+		<ul>
+			<li>le composant doit posséder un rôle <code>role="dialog"</code>&nbsp;;</li>
+			<li>le composant doit être identifié avec une propriété <code>aria-label</code> ou <code>aria-labelledby</code>&nbsp;;</li>
+			<li>lorsque le composant est activé, le focus doit être transmis au premier élément interactif (qui peut prendre le focus) de la fenêtre&nbsp;;</li>
+			<li>tant que le composant est actif, la navigation par la tabulation doit être circonscrite à l'intérieur du composant et ne doit jamais atteindre les autres éléments interactifs de la page&nbsp;;</li>
+			<li>la navigation par tabulation doit être circulaire dans le composant&nbsp;: ce qui veut dire que lorsque le dernier élément est atteint, la tabulation suivante active le premier et inversement&nbsp;;</li>
+			<li>la méthode de fermeture, généralement un bouton, doit être activable avec la touche <kbd>ESC</kbd>&nbsp;;</li>
+			<li>lorsque le composant est fermé, le focus doit être rendu au composant ayant permis de l'ouvrir.</li>
+		</ul>
+		<p>Vous pouvez trouver les détails de ce motif de conception dans la documentation ARIA&nbsp;: <a href="https://www.w3.org/TR/wai-aria-practices/#dialog_modal" lang="en">Dialog (Modal)</a>.</p>
+		<p>Dans ce cas de figure, le motif de conception est connu. Il faut vérifier que l'implémentation ARIA (présence et pertinence des propriétés ARIA requises) et le comportement au clavier sont conformes à ce qui est prévu.</p>
+		<p>Pour le comportement au clavier qui peut être particulièrement complexe, le RGAA réduit l'exigence à un certain nombre de touches de base&nbsp;: <kbd>TAB</kbd>, <kbd>ESC</kbd>, <kbd>ESPACE</kbd>; <kbd>ENTRÉE</kbd> et les touches de direction <kbd>HAUT</kbd>, <kbd>BAS</kbd>, <kbd>DROITE</kbd>, <kbd>GAUCHE</kbd>.</p>
+		<p>Après s'être assuré de la conformité du motif de conception, il faut tester que la restitution est correcte avec les lecteurs d'écran en utilisant une base de référence de test.</p>
+		<p>La base de référence est un jeu de combinaisons associant un lecteur d'écran, un navigateur et un système d'exploitation représentatifs des usages sur le terrain pour la majorité des utilisateurs.</p>
+		<p>À titre d'exemple, voici la base de référence la plus utilisée dans les cas communs, elle couvre environ 80% des situations&nbsp;:</p>
+		<ol>
+			<li>NVDA + Firefox + Windows&nbsp;</li>
+			<li>JAWS + IE + Windows&nbsp;</li>
+			<li>Voice Over + Safari + MacOS&nbsp;</li>
+		</ol>
+		<p>D'autres combinaisons sont disponibles et vous pouvez ajouter des combinaisons particulières en fonction des contraintes d'utilisation de votre application. La description de la base de référence est disponible dans le RGAA&nbsp;: <a href="http://references.modernisation.gouv.fr/referentiel-technique-0#5-base-de-rfrence">base de référence</a>. Vous noterez que des contraintes supplémentaires complètent les combinaisons.</p>
+		<p><strong>Les tests sur la base de référence sont indispensables.</strong></p><p>Au-delà du motif de conception ARIA, le composant peut être affecté d'autres comportements, enrichi de propriétés ARIA complémentaires ou interagir avec d'autres composants de la page, ce qui pourrait perturber la restitution.</p>
+		<p>Une fois l'ensemble de ces tests effectués, vous pourrez considérer que le composant est «&nbsp;compatible avec l'accessibilité&nbsp;».
+		</p><p>Ces tests qui peuvent sembler très contraignants sont facilités par l'utilisation de bibliothèques de composants, prêts à l'emploi, qui implémentent déjà les motifs de conception ARIA.</p>
+		<p>Dans le cadre de ses ressources, le RGAA propose une étude très complète de plusieurs bibliothèques communément utilisées avec, si nécessaire, les corrections à effectuer : <a href="https://disic.github.io/rgaa_bibliotheques_javascript/tutoriels/index.html">Tutoriel "composants d’interface JavaScript"</a>.</p>
+		<h3>Cas d'un composant non conforme</h3>
+		<p>Dans le cas où il n'est pas possible de rendre un composant conforme, souvent du fait de limitations de la bibliothèque utilisée, vous devrez proposer une alternative pertinente qui permette à l'utilisateur d'accéder aux mêmes contenus et à des fonctionnalités similaires.</p>
+		<p>Cette alternative peut être un autre composant conforme ou une méthode qui ne requiert pas JavaScript pour fonctionner. Par exemple : un champ de saisie à la place d'un <span lang="en">datepicker</span> ou même un lien vers une version de la page fonctionnelle sans les composants en cause.</p>
+		</article>
+		<article class="article" id="access-clavier">
+		<h2>Accès au clavier et à la souris</h2>
+		<p>La dernière chose à vérifier est l'accessibilité au clavier de tous les composants implémentés dans votre page.</p>
+		<p>Lorsque le composant correspond à un motif de conception, l'accessibilité au clavier est prise en charge par le motif de conception lui-même.</p>
+		<p>En revanche, quand ce n'est pas le cas, il faut vérifier que les éléments déclenchant une action sont accessibles avec la touche de tabulation et activables avec la touche <kbd>ENTRÉE</kbd> au moins.</p>
+		<h3>Technique pour rendre un élément accessible au clavier</h3>
+		<p>Lorsque un élément ne peut pas nativement recevoir le focus de tabulation (ce qui le rend inutilisable au clavier), il est possible de forcer ce comportement avec l'attribut <code>tabindex="0"</code>.</p>
+		<p><i><strong>Cependant attention, si cela suffit pour le rendre accessible au clavier, cela peut rester insuffisant, notamment si cet élément se comporte comme un bouton HTML.</strong></i>.</p><p>Dans ce cas, le motif de conception <code>button</code> devra vraisemblablement être utilisé. Ce motif prévoit par exemple que le composant soit activable avec la touche <kbd>ENTRÉE</kbd> et la touche <kbd>ESPACE</kbd>.</p>
+		<p>Une autre solution qui doit être privilégiée est d'employer l'élément <code>&lt;button&gt;</code> qui vous déchargera de toute la gestion au clavier.</p>
+		<h3>Cas des liens (<code>a href</code> ou <code>a</code>) utilisés comme bouton</h3>
+		<p>Une très mauvaise habitude de développement est d'utiliser un lien <code>&lt;a href="#"&gt;</code> ou une ancre <code>a</code> dépourvue d'attribut <code>href</code> pour simuler un bouton d'action.</p>
+		<p>Cette pratique pose deux problèmes&nbsp;:</p>
+			<ul>
+				<li>dans le cas de l'utilisation d'une ancre, <strong>l'élément est inutilisable au clavier</strong> puisqu'une balise <code>a</code> sans attribut <code>href</code> ne peut pas recevoir le focus à moins d'y ajouter un attribut <code>tabindex="0"</code>.</li>
+				<li>qu'il s'agisse d'une ancre ou d'un lien, le lecteur d'écran annoncera cet élément comme étant un lien. L'utilisateur s'attendra donc à atteindre une autre page/ressource ou un autre contenu dans la page, mais certainement pas à une ouverture de fenêtre modale par exemple.</li>
+			</ul>
+		<p>Vous devez impérativement réserver l'utilisation des liens à l'affichage d'une ressource extérieure, une autre page, une fonctionnalité de mise à jour dans la page ou un lien vers une ancre.</p>
+		<p>Dans tous les autres cas il faut utiliser un bouton, c'est-à-dire un élément <code>&lt;button&gt;</code> ou le motif de conception <code>button</code>.</p>
+		<p>Ceci est très important pour que l'utilisateur, qui ne voit pas la page, puisse faire la différence, en restitution, entre l'affichage d'une autre page et l'affichage d'une zone dans la page (ouverture d'une fenêtre modale par exemple).</p>
+		<p>Le motif de conception <code>button</code> est très simple&nbsp;:</p>
+		<ol>
+			<li>le composant doit avoir un rôle <code>button</code>&nbsp;;</li>
+			<li>le composant doit avoir un attribut <code>tabindex="0"</code>&nbsp;;</li>
+			<li>le composant doit être activable avec la touche <code>ENTRÉE</code> et <code>ESPACE</code>&nbsp;;</li>	
+		</ol>
+		<p>Il peut permettre de réparer rapidement une simulation de bouton via un lien (ou tout autre élément) en prenant en charge le comportement du bouton avec JavaScript&nbsp;:</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"button"</span> &gt;</span>faux bouton<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"button"</span> <span class="hljs-attribute">tabindex</span>=<span class="hljs-value">"0"</span>&gt;</span>faux bouton<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"image.png"</span> <span class="hljs-attribute">alt</span>=<span class="hljs-value">"faux bouton"</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"button"</span> <span class="hljs-attribute">tabindex</span>=<span class="hljs-value">"0"</span>/&gt;</span>
+</code>
+</pre>
+<p>L'idéal étant d'utiliser des éléments natifs comme <code>&lt;button&gt;</code> ou <code>&lt;input type="button"&gt;</code> par exemple.</p>
+		</article>
+
+	</main>
+
+	<aside role="complementary" id="footer-block" class="clear">
+		<div class="col-1-2">
+			<h2 id="plusloin">Pour aller plus loin</h2>
+			<h3>Critères de succès WCAG</h3>
+		<ul>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#text-equiv-all">1.1.1</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#ensure-compat-rsv">4.1.2</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#content-structure-separation-programmatic">1.3.1</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#keyboard-operation-keyboard-operable">2.1.1</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#keyboard-operation-all-funcs">2.1.3</a></li>
+			<li><a href="https://www.w3.org/Translations/WCAG20-fr/#navigation-mechanisms-focus-visible">2.4.7</a></li>
+		</ul>
+		<h3>Techniques et échecs WCAG</h3>
+		<ul>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G10.html">G10</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G90.html">G90</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G135.html">G135</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G136.html">G136</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/G202.html">G202</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/ARIA4.html">ARIA4</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/ARIA5.html">ARIA5</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/ARIA18.html">ARIA18</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/ARIA19.html">ARIA19</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC2.html">SRC2</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC20.html">SRC20</a></li>				
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC21.html">SRC21</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC29.html">SRC29</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/SRC35.html">SRC35</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F15.html">F15</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F19.html">F19</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F20.html">F20</a></li>	
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F42.html">F42</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F54.html">F54</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F55.html">F55</a></li>
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F59.html">F59</a></li>	
+			<li><a href="https://www.w3.org/TR/WCAG-TECHS/F79.html">F79</a>
+		</ul>
+		</div>
+		<div class="col-1-2">
+			<h2 id="criteres">Critères RGAA 3</h2>
+			<ul>
+			<li>7.1 [A]</li>
+			<li>7.2 [A]</li>
+			<li>7.3 [A]</li>
+			</ul>
+		</div>
+	</aside>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

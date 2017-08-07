@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fiche 4 : Accessible Rich Internet Application (WAI ARIA) - Guide du développeur RGAA 3</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="css/styles.css" media="all">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="text/javascript" src="highlight/highlight.pack.js"></script>
+  <link rel="stylesheet" href="highlight/styles/tomorrow-night-eighties.css" media="all">
+	<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="main-header">
+	<div class="inside">
+		<ul class="skip-links">
+			<li><a href="#main">contenu</a></li>
+			<li><a href="#navigation">navigation</a></li>
+		</ul>
+		<header role="banner" class="header  clear" id="banner">
+			<h1 class="title">Guide du développeur RGAA&nbsp;3</h1>
+		</header>
+
+		<nav role="navigation" class="gp-sommaire" id="navigation" aria-label="Sommaire du guide">
+			<button id="btnSommaire" aria-expanded="false">Sommaire</button>
+			<ul class="sommaire is-hidden" id="sommaireToggle">
+				<li><a href="index.html">Introduction</a></li>
+				<li><a href="1-ordre-tab-piege-clavier.html">Fiche 1&nbsp;: Ordre de tabulation et piège au clavier</a></li>
+				<li><a href="2-compatibilite-access-clavier.html">Fiche 2&nbsp;: Compatibilité et accès au clavier</a></li>
+				<li><a href="3-changement-contexte.html">Fiche 3&nbsp;: Changement de contexte et alerte non sollicitée</a></li>
+				<li><a href="4-aria.html">ARIA</a></li>
+				<li><a href="5-api-aria.html">Fiche 4&nbsp;: Accessible Rich Internet Application (WAI ARIA) </a></li>
+				<li><a href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ?</a></li>
+				<li><a href="7-motif-conception.html">Fiche 6&nbsp;: Motif de conception ARIA</a></li>
+				<li><a href="8-base-reference.html">Fiche 7&nbsp;: Base de référence - Tests de restitution</a></li>
+				<li><a href="9-utiliser-aria.html">Fiche 8&nbsp;: Utiliser ARIA</a></li>								
+			</ul>
+		</nav>
+		<div class="github-link">
+			<p><a href="https://github.com/DISIC/guide-developpeur">Contribuer</a>
+			<a class="pdfdown" title="Télécharger le Guide du développeur RGAA 3 (pdf, 1,4 Mo)" href="export/guide-developpeur.pdf">Télécharger</a></p>
+		</div>
+	</div>
+</div>
+
+<div id="wrapper">
+
+	<nav role="navigation" class="internav clear">
+		<ul>
+			<li><a class="prev" href="4-aria.html"><span aria-hidden="true"> &laquo; </span>ARIA </a></li>
+			<li><a class="next" href="6-lecteur-ecran.html">Fiche 5&nbsp;: Comment un lecteur d'écran sait-il de quoi il parle ? <span aria-hidden="true"> &raquo; </span></a></li>
+		</ul>
+	</nav>
+
+	<main id="main" role="main">
+		<h1 class="fiche-title">Fiche 4&nbsp;: <span lang="en">Accessible Rich Internet Application</span> (WAI ARIA)&nbsp;</h1>
+
+		<article class="article" id="introduction">
+			<h2>Introduction</h2>
+			<p><img src="img/aria-w3c.png" alt="" class="right" /> Les composants développés avec JavaScript sont inconnus du navigateur qui ne peut pas communiquer les propriétés et les états de ces éléments aux technologies d'assistance par l’intermédiaire des API d'accessibilité. Par ailleurs, si ces composants doivent interagir avec l'utilisateur, le navigateur ne connaît pas non plus les comportements à implémenter, au clavier notamment.</p>
+			<p>L'API ARIA a pour rôle de permettre aux développeurs d'informer le navigateur de l'ensemble des propriétés et des états des composants développés avec JavaScript et, avec des motifs de conceptions rigoureux, de proposer des modèles d'utilisation au clavier.</p>
+			<p>ARIA propose un dispositif simple pour indiquer les grandes structures du document et quelques propriétés particulières pour rendre accessibles les zones de la page mises à jour dynamiquement.</p>
+		</article>
+		<article class="article" id="essentiel">
+			<h2>Généralités</h2>
+		<h3>Rôle, état et propriété</h3>
+		<p>L'API décrit trois types de propriétés : des rôles, des états et des propriétés.</p>
+		<p><strong>Les rôles permettent d'indiquer le type de composant ou d'élément.</strong> ARIA propose une soixantaine de rôles. Certains sont spécifiques à des modèles de composants, d'autres équivalent à des éléments HTML.</p>
+		<p>Quelques exemples&nbsp;: <code>dialog</code> pour une fenêtre de dialogue, <code>slider</code> pour un potentiomètre de saisie, <code>tabpanel</code> pour un système d'onglets, <code>heading</code> équivalent à <code>hx</code>, <code>list</code> et <code>listitem</code> équivalent aux balises <code>ul</code> et <code>li</code>, <code>button</code> équivalent à la balise <code>button</code>.</p>
+		<p><strong>Les états et les propriétés permettent de décrire le composant et d'informer de ses changements d'états</strong>. Les états et les propriétés sont toujours préfixés par <code>aria-</code>.</p>
+		<p>Quelques exemples de propriétés&nbsp;: <code>aria-valuemin</code> pour indiquer la valeur minimum d'un composant, <code>aria-level</code> pour indiquer le niveau d'un élément dans un groupe (par exemple avec <code>heading</code> ou <code>listitem</code>), <code>aria-required</code> pour indiquer si une saisie de valeur est obligatoire.</p>
+		<p>Quelques exemples d'états&nbsp;: <code>aria-selected</code> pour indiquer si un composant est sélectionné, <code>aria-expanded</code> pour indiquer si un composant est ouvert ou fermé, <code>aria-invalid</code> pour indiquer si une valeur est fausse.</p>
+		<p><strong>Enfin, certains rôles, états ou propriétés sont spécifiques à des besoins particuliers&nbsp;:</strong> comme la description des relations entre les différentes parties d'un composant, la description des grandes structures d'un document ou d'une interface, la gestion des mises à jour dynamiques, la nature du contenu (application ou document), le statut de restitution.</p>
+		<p>Quelques exemples&nbsp;: <code>aria-haspopup</code> signale qu'un composant contrôle un menu contextuel ou un sous-menu, <code>main</code> signale la partie principale d'un document, <code>aria-live</code> contrôle la restitution d'un contenu dynamique, <code>application</code> signale que le contenu se comporte comme une application, <code>aria-hidden</code> signale que la restitution est inhibée.</p>
+		<h4>Implémentation</h4>
+		<p>Le principe d'implémentation est très trivial : ARIA s'implémente comme un jeu d'attributs dont les valeurs qui le nécessitent vont être controlées par JavaScript.</p>
+		<p>Par exemple une case à cocher s'implémentera de la manière suivante&nbsp;:</p>
+<pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"checkbox"</span> <span class="hljs-attribute">tabindex</span>=<span class="hljs-value">"0"</span> <span class="hljs-attribute">aria-checked</span>=<span class="hljs-value">"false"</span> <span class="hljs-attribute">aria-labelledby</span>=<span class="hljs-value">"labelcheckbox"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"labelcheckbox"</span>&gt;</span>Oui<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+</code>
+</pre>
+<h3>Objectifs de l'API ARIA</h3>
+<h4>Définir les composants d'interface et de structure</h4>
+<p>ARIA va donc permettre de définir l'intégralité d'un composant : son rôle, ses états et propriétés, sa structure et son comportement.</p>
+<h5>Informer de l'état et des propriétés des composants d'interface</h5>
+<p>En s'appuyant sur l'implémentation d'ARIA par le développeur, le navigateur va transmettre l'ensemble des informations aux APIs d'accessibilité du système.</p>
+<p><strong>Attention !</strong>ARIA est une API purement descriptive. Ce n'est pas parce que vous allez déclarer qu'un <code>span</code> a un rôle <code>checkbox</code> que le navigateur va implémenter le comportement d'une case à cocher. <strong>L'intégralité du comportement, les événements, la mise à jour des états et des propriétés, le comportement au clavier incombe au développeur via JavaScript.</strong></p>
+<h5>Informer et gérer les mises à jour de contenus dynamiques</h5>
+<p>Il existe une exception : la gestion des zones mises à jour dynamiquement, ce qu'on appelle une <i lang="en">live region</i>. Une région contrôlée par <code>aria-live</code> ou une fenêtre d'alerte contrôlée par le rôle <code>alert</code> sont prises en charge par le navigateur qui informera l'API d'accessibilité des changements opérés sur ces zones.</p>
+<h5>Rendre les composants utilisables au clavier</h5>
+<p>Tout composant doit être opérable au clavier. Pour chaque composant qu'il définit, ARIA propose donc un comportement au clavier normalisé de telle sorte que les composants interagissent de manière uniforme en reprenant les concepts à l'œuvre dans les logiciels notamment.</p>
+<p>Cette partie de la conception d'un composant avec ARIA peut devenir complexe car elle met en jeu des interactions au clavier particulièrement riches.</p>
+		</article>
+	</main>
+
+	<aside role="complementary" id="footer-block" class="clear">
+		<div class="col-1-2">
+			<h2 id="plusloin">Pour aller plus loin</h2>
+		<ul>
+		<li><a href="https://www.w3.org/TR/wai-aria/roles">L'API</a> (<code>role</code>, <code>state</code> et propriétés)</li>
+		<li><a href="https://www.w3.org/TR/wai-aria-practices/">Les <span lang="en">Best practices</span></a> (<span lang="en">Design pattern</span>, Comportement et gestion clavier)</li>
+		<li><a href="https://github.com/w3c/using-aria/" lang="en">Using WAI-ARIA in HTML</a></li>
+		</ul>
+		</div>
+	</aside>
+
+	<footer id="footer" role="contentinfo" class="clear">
+		<h2>Licence d'utilisation</h2>
+		<p class="logo-smgap"><a href="http://references.modernisation.gouv.fr/"><img src="img/modernisation-logo.jpg" alt="Secrétariat général pour le modernisation de l'action publique"></a></p>
+		<p>Ce document est la propri&#233;t&#233; du Secr&#233;tariat g&#233;n&#233;ral &#224; la modernisation de l'action publique fran&#231;ais (SGMAP). Il est plac&#233; sous la <a href="https://www.etalab.gouv.fr/licence-ouverte-open-licence">licence ouverte 1.0 ou ult&#233;rieure</a>, &#233;quivalente &#224; une licence <i lang="en">Creative Commons BY</i>. Pour indiquer la paternit&#233;, ajouter un lien vers la version originale du document disponible sur le <a href="https://github.com/DISIC">compte <span lang="en">GitHub</span> de la DInSIC</a>.</p>
+	</footer>
+
+</div>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

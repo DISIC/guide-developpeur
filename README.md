@@ -12,4 +12,4 @@ Les ressources complémentaires sont des supports sans valeur réglementaire et 
 
 ## Consultation
 
-Vous pouvez [consulter ce guide en ligne](https://disic.github.io/guide-developpeur/) ou le télécharger au [format ODT (663 ko)](export/guide_developpeur.odt) ou [PDF (1,4 Mo)](export/guide_developpeur.pdf).
+Vous pouvez [consulter ce guide en ligne](https://disic.github.io/guide-developpeur/) ou le télécharger au [format ODT (663 ko)](https://github.com/DISIC/guide-developpeur/raw/master/export/guide-developpeur.odt) ou [PDF (1,4 Mo)](https://github.com/DISIC/guide-developpeur/raw/master/export/guide-developpeur.pdf).
